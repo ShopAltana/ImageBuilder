@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="icon.png"> <!-- brouser icon -->
+    <title>Image Search</title>
+
+    <style>
+        body {
+            font-family: Trebuchet, sans-serif;
+            background-color:  #ffb9c0;
+            color: #f9f7f4;
+            margin: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+          }
+
+        .canvas-container { /* The place where you build the ring */
+          display: flex;
+          background-color:  #ffefed;
+          border:5px solid #da9d94;
+          border-radius: 15px;
+          justify-content: center; /* Centers horizontally */
+          align-items: center;     /* Centers vertically */
+          height: 600px;           /* Ensures the container takes the full viewport height */
+          width: 600px;
+        }
+
+        img { /* How do the images display on the page */
+          max-width: 1200px; /* Maximum "priview" image dimensions */
+          max-height: 1200px;
+          border: 5px solid #f9f7f4; /* Adds a black border around each image */
+          border-radius: 10px; /* Adds rounded corners to the border */
+        }
+
+        .app {
+          display: flex;
+          gap: 20px; /* space between sidebar and canvas */
+        }
+
+        .sidebar {
+          background-color: #ffefed;
+          border: 5px solid #da9d94;
+          border-radius: 15px;
+
+          width: 220px;
+          padding: 15px;
+
+          display: flex;
+          flex-direction: column;
+          gap: 10px;
+        }
+        #expandBtnLv1 {
+          background-color: #f1d2b3;
+          border: 3px solid #da9d94;
+          border-radius: 10px;
+        }
+
+      .menu-options {
+        display: none; /* Hide the options by default */
+        /* Add styling for layout (e.g., vertical stacking with 'display: block') */
+      }
+
+      .menu-options button {
+        display: block; /* Stack buttons horizontaly in sidebar*/
+        margin-top: 5px; /* Add some space between the buttons */
+        background-color: #f1d2b3; /* Button color */
+        border: 3px solid #da9d94; /* Boarder size and color */
+        border-radius: 10px; /* Give buttons a curved boarder */
+        padding: 8px 12px;
+        width: 100%;
+        box-sizing: border-box; /* Ensures padding is included in the width */
+      }
+
+      /* Make main buttons stand out */
+      .sidebar > button,
+      .expandable-menu > button {
+        width: 100%;
+        padding: 10px;
+        font-weight: bold;
+      }
+
+      .menu-options { /* Indent nested menus */
+        margin-left: 10px;
+      }
+
+      /* show/hide the menu */
+      .menu-options.show {
+        display: block;
+      }
+
+    </style>
+</head>
+
+<body>
+  <div class="app">
+    <div class="sidebar"> <!-- creating an expandable/colapsable sidebar menu -->
+      <div class="expandable-menu">
+        <button id="expandBtnLv1">Ring Size</button>
+        <div id="menuOptionslv1" class="menu-options">
+          <button id="expandBtnLv2">Size 1</button>
+          <div id="menuOptionslv2" class="menu-options">
+            <button id="expandBtnLv3">1.6mm Wide</button>
+            <div id="menuOptionslv3" class="menu-options">
+              <button onclick="setPart('band','RingBuilderImages/S1W16H16Band.png')">1.6mm Tall</button>
+              <button onclick="setPart('band','RingBuilderImages/S1W16H17Band.png')">1.7mm Tall</button>
+              <button onclick="setPart('band','RingBuilderImages/S1W16H18Band.png')">1.8mm Tall</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="canvas-container">
+      <canvas id="avatar" width="600" height="600"></canvas>
+    </div>
+  </div>
+</body>
+
+<script>
+  const canvas = document.getElementById("avatar");
+  const ctx = canvas.getContext("2d");
+
+  const layers = { band: null };
+  const layerOrder = ["band"];
+
+  function setPart(category, src) {
+  layers[category] = src;
+  renderAvatar();
+  }
+
+  function renderAvatar() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  layerOrder.forEach(cat => {
+    if (!layers[cat]) return;
+    const img = new Image();
+    img.src = layers[cat];
+    img.onload = () => ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+  });
+  }
+
+  // Get references to the button and the menu options container
+  const expandBtnLv1 = document.getElementById("expandBtnLv1");
+  const expandBtnLv2 = document.getElementById("expandBtnLv2");
+  const expandBtnLv3 = document.getElementById("expandBtnLv3");
+  const menuOptionslv1 = document.getElementById("menuOptionslv1");
+  const menuOptionslv2 = document.getElementById("menuOptionslv2");
+  const menuOptionslv3 = document.getElementById("menuOptionslv3");
+
+  // Add a click event listener to the main button
+  expandBtnLv1.addEventListener("click", function() {
+    // Toggle the 'show' class to make the options visible or hidden
+    menuOptionslv1.classList.toggle("show");
+  });
+  expandBtnLv2.addEventListener("click", function() {
+    // Toggle the 'show' class to make the options visible or hidden
+    menuOptionslv2.classList.toggle("show");
+  });
+  expandBtnLv3.addEventListener("click", function() {
+    // Toggle the 'show' class to make the options visible or hidden
+    menuOptionslv3.classList.toggle("show");
+  });
+
+
+</script>
