@@ -1,3 +1,10 @@
+
+<!--
+To do:
+1. notate full document
+2. side pannel with measurments
+ -->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -18,6 +25,39 @@
             min-height: 100vh;
           }
 
+          h1 {
+            color: #ffb9c0;
+            font-size: 25px;
+            font-weight: bold;
+            margin-left: 27px; /* indent text block 27px*/
+            margin-top: 2px; /* adjusts the top margin */
+            margin-bottom: 30px; /* adjusts the bottom margin */
+          }
+
+          h2 {
+            color: #da9d94;
+            font-size: 15px;
+            font-weight: normal;
+            margin-left: 30px; /* indent text block 30px*/
+            text-indent: -13px; /* pull back first line of the text block -13px to make the "list" more appealing */
+            margin-top: 1px; /* adjusts the top margin */
+            margin-bottom: 5px; /* adjusts the bottom margin */
+          }
+/* FIX --> DISPLAY AT TOP, PAD TEXT BOARDER, ADD 20px SPACE BETWEEN .instruction and .sidebar*/
+          .instruction { /* What keys do what */
+            flex-direction: column; /* Stacks children vertically */
+            background-color:  #ffefed;
+            border:5px solid #da9d94;
+            border-radius: 10px;
+            justify-content: center; /* Centers horizontally */
+            align-items: top;     /* Centers vertically */
+            height: 600px;           /* Ensures the container takes the full viewport height */
+            width: 300px;
+
+            display: flex;
+            gap: 0px
+          }
+
         .canvas-container { /* The place where you build the ring */
           display: flex;
           background-color:  #ffefed;
@@ -30,8 +70,6 @@
         }
 
         img { /* How do the images display on the page */
-          max-width: 1200px; /* Maximum "priview" image dimensions */
-          max-height: 1200px;
           border: 5px solid #f9f7f4; /* Adds a black border around each image */
           border-radius: 10px; /* Adds rounded corners to the border */
         }
@@ -46,17 +84,59 @@
           border: 5px solid #da9d94;
           border-radius: 15px;
 
-          width: 220px;
+          width: 150px;
+          height: 570px; /* Match canvas height */
           padding: 15px;
 
           display: flex;
           flex-direction: column;
           gap: 10px;
+
+          overflow-y: auto; /* Add vertical scrollbar when needed */
+          overflow-x: hidden; /* Prevent horizontal scrollbar */
         }
-        #expandBtnLv1 {
-          background-color: #f1d2b3;
-          border: 3px solid #da9d94;
-          border-radius: 10px;
+
+        /* statistics panel */
+        .stats-panel {
+          background-color: #ffefed;
+          border: 5px solid #da9d94;
+          border-radius: 15px;
+
+          width: 200px;
+          height: 570px;
+          padding: 15px;
+
+          display: flex;
+          flex-direction: column;
+          gap: 10px;
+
+          overflow-y: auto;
+          overflow-x: hidden;
+
+          font-size: 13px;
+          color: #da9d94;
+        }
+
+        .stats-panel h3 {
+          color: #ffb9c0;
+          font-size: 18px;
+          margin: 0 0 10px 0;
+          font-weight: bold;
+        }
+
+        .stats-section {
+          margin-bottom: 15px;
+          padding-bottom: 10px;
+          border-bottom: 2px solid #da9d94;
+        }
+
+        .stats-section:last-child {
+          border-bottom: none;
+        }
+
+        .stat-item {
+          margin: 5px 0;
+          line-height: 1.4;
         }
 
       .menu-options {
@@ -81,6 +161,9 @@
         width: 100%;
         padding: 10px;
         font-weight: bold;
+        background-color: #f1d2b3;
+        border: 3px solid #da9d94;
+        border-radius: 10px;
       }
 
       .menu-options { /* Indent nested menus */
@@ -92,23 +175,76 @@
         display: block;
       }
 
+      .expand-btn {
+        cursor: pointer;
+      }
+
+      .menu-options {
+        cursor: pointer;
+      }
+
+
     </style>
 </head>
 
 <body>
   <div class="app">
+    <div class="instruction">
+      <h1> Instructions </h1>
+      <h2> • Highlight stone before adding prongs, prongs will bind to selected stone </h2>
+      <h2> • Left click stone to highlight </h2>
+      <h2> • Left click and hold to select </h2>
+      <h2> • Click and drag to move objects </h2>
+      <h2> • 'Shift' while stone is selected to snap prongs to parent stone </h2>
+      <h2> • Left & Right Arrowkeys to rotate selected object</h2>
+      <h2> • Up & Down Arrowkeys to move selected object's layer </h2>
+      <h2> • Backspace to delete selected object </h2>
+      <h2> • + & - to scale selected prong size </h2>
+      <h2> • Press 'b' to highlight and select multiple stones at once </h2>
+      <h2> • Cmd C to copy selected stones and associated prongs </h2>
+      <h2> • Cmd V to paste copied stones and associated prongs </h2>
+      <h2> • Click 'x' to center selected objects </h2>
+    </div>
+
     <div class="sidebar"> <!-- creating an expandable/colapsable sidebar menu -->
       <div class="expandable-menu">
-        <button id="expandBtnLv1">Ring Size</button>
-        <div id="menuOptionslv1" class="menu-options">
-          <button id="expandBtnLv2">Size 1</button>
-          <div id="menuOptionslv2" class="menu-options">
-            <button id="expandBtnLv3">1.6mm Wide</button>
-            <div id="menuOptionslv3" class="menu-options">
-              <button onclick="setPart('band','RingBuilderImages/S1W16H16Band.png')">1.6mm Tall</button>
-              <button onclick="setPart('band','RingBuilderImages/S1W16H17Band.png')">1.7mm Tall</button>
-              <button onclick="setPart('band','RingBuilderImages/S1W16H18Band.png')">1.8mm Tall</button>
+        <button class="expand-btn">Ring Size</button>
+        <div class="menu-options">
+          <button class="expand-btn">Size 1</button>
+          <div class="menu-options">
+            <button class="expand-btn">1.6mm Wide</button>
+            <div class="menu-options">
+              <button onclick="addBand('RingBuilderImages/Band/S1W16H16Band.png')">1.6mm Tall</button>
+              <button onclick="addBand('RingBuilderImages/Band/S1W16H17Band.png')">1.7mm Tall</button>
+              <button onclick="addBand('RingBuilderImages/Band/S1W16H18Band.png')">1.8mm Tall</button>
             </div>
+          </div>
+          <button class="expand-btn">Size 14</button>
+          <div class="menu-options">
+            <button class="expand-btn">1.6mm Wide</button>
+            <div class="menu-options">
+              <button onclick="addBand('RingBuilderImages/Band/S14W16H16Band.png')">1.6mm Tall</button>
+            </div>
+          </div>
+        </div>
+        <button class="expand-btn">Stones</button>
+        <div class="menu-options">
+          <button class="expand-btn">Round</button>
+          <div class="menu-options">
+            <button onclick="addStone('RingBuilderImages/Stone/WtRd6mm.png')">6mm</button>
+          </div>
+          <button class="expand-btn">Oval</button>
+          <div class="menu-options">
+            <button onclick="addStone('RingBuilderImages/Stone/WtOv7x5mm.png')">7 x 5mm</button>
+            <button onclick="addStone('RingBuilderImages/Stone/WtOv5x4mm.png')">5 x 4mm</button>
+          </div>
+        </div>
+        <button class="expand-btn">Prongs</button>
+        <div class="menu-options">
+          <button class="expand-btn">Round Prongs</button>
+          <div class="menu-options">
+            <button onclick="addProng('RingBuilderImages/Prongs/RoundProng.png')">Round Prong</button>
+            <button onclick="addFourProngsAroundStone('RingBuilderImages/Prongs/RoundProng.png')">4 Round Prongs</button>
           </div>
         </div>
       </div>
@@ -117,53 +253,869 @@
     <div class="canvas-container">
       <canvas id="avatar" width="600" height="600"></canvas>
     </div>
+
+    <div class="stats-panel" id="statsPanel">
+      <h3>Statistics</h3>
+      <div id="statsContent">
+        <p>Select an object to view details</p>
+      </div>
+    </div>
   </div>
+
+
 </body>
 
 <script>
   const canvas = document.getElementById("avatar");
   const ctx = canvas.getContext("2d");
 
-  const layers = { band: null };
-  const layerOrder = ["band"];
+  // ===== STATE =====
+  const bands = [];
+  const stones = [];
+  const prongs = [];
 
-  function setPart(category, src) {
-  layers[category] = src;
-  renderAvatar();
-  }
+  let selectedStones = []; // for selecting stones / allow for multiple stone selection
+  let activeObject = null; // for dragging
 
-  function renderAvatar() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  let multiSelectMode = false; // toggled by 'b'
 
-  layerOrder.forEach(cat => {
-    if (!layers[cat]) return;
+  let clipboard = {
+    bands: [],
+    stones: [],
+    prongs: []
+  };
+
+
+  // ===== HELPERS =====
+  function createBand(src) {
     const img = new Image();
-    img.src = layers[cat];
-    img.onload = () => ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-  });
+    img.src = src + '?v=' + Date.now(); // Adds timestamp to bypass cache
+    // ... rest
   }
 
-  // Get references to the button and the menu options container
-  const expandBtnLv1 = document.getElementById("expandBtnLv1");
-  const expandBtnLv2 = document.getElementById("expandBtnLv2");
-  const expandBtnLv3 = document.getElementById("expandBtnLv3");
-  const menuOptionslv1 = document.getElementById("menuOptionslv1");
-  const menuOptionslv2 = document.getElementById("menuOptionslv2");
-  const menuOptionslv3 = document.getElementById("menuOptionslv3");
+  function normalizeScale(img) {
+    return 0.3
+  }
 
-  // Add a click event listener to the main button
-  expandBtnLv1.addEventListener("click", function() {
-    // Toggle the 'show' class to make the options visible or hidden
-    menuOptionslv1.classList.toggle("show");
-  });
-  expandBtnLv2.addEventListener("click", function() {
-    // Toggle the 'show' class to make the options visible or hidden
-    menuOptionslv2.classList.toggle("show");
-  });
-  expandBtnLv3.addEventListener("click", function() {
-    // Toggle the 'show' class to make the options visible or hidden
-    menuOptionslv3.classList.toggle("show");
+  function normalizeBandScale(img) {
+    return 0.3; // No scaling - use original pixel dimensions
+  }
+
+  function updateAttachedProngs(stone) {
+    prongs.forEach(prong => {
+      if (prong.parentStone === stone) {
+        // Apply relative angle + current stone rotation
+        prong.x = stone.x + Math.cos(prong.angle + stone.rotation) * prong.radius;
+        prong.y = stone.y + Math.sin(prong.angle + stone.rotation) * prong.radius;
+
+        prong.rotation = prong.angle + stone.rotation;
+      }
+    });
+  }
+
+   function hitTestStone(x, y, stone) {
+     const dx = (x - stone.x) / (stone.radiusX * (stone.hitShrink || 1));
+     const dy = (y - stone.y) / (stone.radiusY * (stone.hitShrink || 1));
+     return dx * dx + dy * dy <= 1;
+   }
+
+    function hitTestProng(x, y, prong) { // prong hit radius
+      const r = Math.max(
+        6,
+        (prong.img.naturalWidth * prong.scale) / 2 // (actual pixel prong size * prong scale to stone) / make width into radious
+      );
+
+      const dx = x - prong.x;
+      const dy = y - prong.y;
+      return dx * dx + dy * dy <= r * r;
+    }
+
+
+    function hitTestBand(x, y, band) { // band hit radius
+      const dx = (x - band.x) / (band.radiusX * (band.hitShrink || 1));
+      const dy = (y - band.y) / (band.radiusY * (band.hitShrink || 1));
+      return dx * dx + dy * dy <= 1;
+    }
+
+    function roundRect(ctx, x, y, width, height, radius) {
+      ctx.beginPath();
+      ctx.moveTo(x + radius, y);
+      ctx.lineTo(x + width - radius, y);
+      ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
+      ctx.lineTo(x + width, y + height - radius);
+      ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+      ctx.lineTo(x + radius, y + height);
+      ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
+      ctx.lineTo(x, y + radius);
+      ctx.quadraticCurveTo(x, y, x + radius, y);
+      ctx.closePath();
+    }
+
+    // ===== IMAGE METADATA =====
+    const imageMetadata = {
+      // Bands: Size format [width_mm, height_mm]
+      'S1W16H16Band.png': { type: 'band', width: 1.6, height: 1.6, ringSize: 1 },
+      'S1W16H17Band.png': { type: 'band', width: 1.6, height: 1.7, ringSize: 1 },
+      'S1W16H18Band.png': { type: 'band', width: 1.6, height: 1.8, ringSize: 1 },
+
+      // Stones: Size format [length_mm, width_mm, shape]
+      'WtOv7x5mm.png': { type: 'stone', shape: 'Oval', length: 7, width: 5 },
+      'WtOv5x4mm.png': { type: 'stone', shape: 'Oval', length: 5, width: 4 },
+      'WtRd6mm.png': { type: 'stone', shape: 'Round', diameter: 6 },
+
+      // Prongs
+      'RoundProng.png': { type: 'prong', shape: 'Round' }
+    };
+
+    // Helper function to get metadata from image source
+    function getImageMetadata(imgSrc) {
+      const filename = imgSrc.split('/').pop().split('?')[0]; // Remove path and cache-busting
+      return imageMetadata[filename] || null;
+    }
+
+
+   // ===== GLOBAL SCENE SCALE =====
+   let sceneScale = 1; // 1 = current size, <1 smaller, >1 larger
+
+   const PRONG_TO_STONE_RATIO = 0.2; //Prong size is proportional to the selected stone
+
+
+  // ===== BAND =====
+  function createBand(src) {
+    const img = new Image();
+    img.src = src;
+
+    const band = {
+      img,
+      x: canvas.width / 2,
+      y: canvas.height / 2,
+      scale: 1,
+      rotation: 0,
+      zIndex: bands.length
+    };
+
+    img.onload = () => {
+      band.scale = normalizeBandScale(img);
+
+      // BAND SHAPE/RADIOUS (ellipse, not square image box)
+      band.radiusX = (img.naturalWidth * band.scale) / 2;
+      band.radiusY = (img.naturalHeight * band.scale) / 2;
+
+      // THE CLICKABLE AREA of the band is 100% of its radius
+      band.hitShrink = 1;
+
+      renderAvatar();
+    };
+
+    return band;
+  }
+
+  function addBand(src) {
+    bands.push(createBand(src));
+  }
+
+  // ===== STONES =====
+  function createStone(src) {
+    const img = new Image();
+    img.src = src;
+
+    const stone = {
+      img,
+      x: canvas.width / 2,
+      y: canvas.height / 2,
+      scale: 1,
+      rotation: 0,
+      zIndex: stones.length
+    };
+
+    img.onload = () => {
+      stone.scale = normalizeScale(img, 1);
+
+      // STONE SHAPE/RADIOUS (ellipse, not square image box)
+      stone.radiusX = (img.naturalWidth * stone.scale) / 2;
+      stone.radiusY = (img.naturalHeight * stone.scale) / 2;
+
+      // THE CLICKABLE AREA of the stone is 100% of its radius
+      stone.hitShrink = 1;
+
+      // BASE SIZE for proportional scaling of other eliments
+      stone.visualHeight = img.naturalHeight * stone.scale;
+
+      renderAvatar();
+    };
+
+
+    return stone;
+  }
+
+  function addStone(src) {
+    stones.push(createStone(src));
+  }
+
+  // ===== UPDATE STATS PANEL =====
+  function updateStatsPanel() {
+    const statsContent = document.getElementById('statsContent');
+    let html = '';
+
+    // BANDS SECTION
+    if (bands.length > 0) {
+      html += `<div class="stats-section"><strong>Band${bands.length > 1 ? 's' : ''}:</strong><br>`;
+
+      // Group bands by unique metadata
+      const bandGroups = {};
+      bands.forEach(band => {
+        const metadata = getImageMetadata(band.img.src);
+        if (metadata) {
+          const key = `${metadata.ringSize}-${metadata.width}-${metadata.height}`;
+          if (!bandGroups[key]) {
+            bandGroups[key] = { count: 0, metadata };
+          }
+          bandGroups[key].count++;
+        }
+      });
+
+      Object.values(bandGroups).forEach(group => {
+        const m = group.metadata;
+        html += `<div class="stat-item">(${group.count}) Size ${m.ringSize}, ${m.width}mm W x ${m.height}mm H</div>`;
+      });
+
+      html += '</div>';
+    }
+
+    // STONES SECTION
+    if (stones.length > 0) {
+      html += `<div class="stats-section"><strong>Stone${stones.length > 1 ? 's' : ''}:</strong><br>`;
+
+      stones.forEach((stone, index) => {
+        const metadata = getImageMetadata(stone.img.src);
+
+        if (metadata) {
+          if (metadata.diameter) {
+            html += `<div class="stat-item">${metadata.shape} ${metadata.diameter}mm</div>`;
+          } else {
+            html += `<div class="stat-item">${metadata.shape} ${metadata.length} x ${metadata.width}mm</div>`;
+          }
+        } else {
+          html += `<div class="stat-item">Stone ${index + 1} (no metadata)</div>`;
+        }
+
+        // Prongs attached to this stone
+        const attachedProngs = prongs.filter(p => p.parentStone === stone);
+        if (attachedProngs.length > 0) {
+          html += `<div class="stat-item" style="margin-left: 15px;"><strong>Prongs:</strong></div>`;
+
+          // Group prongs by size and type
+          const prongGroups = {};
+          attachedProngs.forEach(p => {
+            const prongMetadata = getImageMetadata(p.img.src);
+            const sizeMM = (p.img.naturalWidth * p.scale * 0.0442).toFixed(2);
+            const shape = prongMetadata ? prongMetadata.shape : 'Unknown';
+            const key = `${shape}-${sizeMM}`;
+
+            if (!prongGroups[key]) {
+              prongGroups[key] = { count: 0, shape, sizeMM };
+            }
+            prongGroups[key].count++;
+          });
+
+          Object.values(prongGroups).forEach(group => {
+            html += `<div class="stat-item" style="margin-left: 30px;">(${group.count}) ${group.shape} ${group.sizeMM}mm</div>`;
+          });
+        }
+      });
+
+      // Unattached prongs
+      const unattached = prongs.filter(p => !p.parentStone);
+      if (unattached.length > 0) {
+        html += `<div class="stat-item"><br><strong>Unattached Prongs: ${unattached.length}</strong></div>`;
+
+        const prongGroups = {};
+        unattached.forEach(p => {
+          const prongMetadata = getImageMetadata(p.img.src);
+          const sizeMM = (p.img.naturalWidth * p.scale * 0.01).toFixed(2);
+          const shape = prongMetadata ? prongMetadata.shape : 'Unknown';
+          const key = `${shape}-${sizeMM}`;
+
+          if (!prongGroups[key]) {
+            prongGroups[key] = { count: 0, shape, sizeMM };
+          }
+          prongGroups[key].count++;
+        });
+
+        Object.values(prongGroups).forEach(group => {
+          html += `<div class="stat-item" style="margin-left: 15px;">(${group.count}) ${group.shape} ${group.sizeMM}mm</div>`;
+        });
+      }
+
+      html += '</div>';
+    }
+
+    // Show message if nothing on canvas
+    if (bands.length === 0 && stones.length === 0 && prongs.length === 0) {
+      html = '<p>No items on canvas</p>';
+    }
+
+    statsContent.innerHTML = html;
+  }
+
+  // ===== PRONGS =====
+  function addProng(src) {
+    if (!selectedStone) {
+      alert("Select a stone first!");
+      return;
+    }
+
+    const img = new Image();
+    img.src = src;
+
+    img.onload = () => {
+      const targetProngHeight =
+        selectedStone.visualHeight * PRONG_TO_STONE_RATIO;
+
+      const prongScale =
+        targetProngHeight / img.naturalHeight;
+
+      const prong = {
+        img,
+        x: selectedStone.x, //position at stone center x
+        y: selectedStone.y, //position at stone center y
+        scale: prongScale,
+        rotation: 0, // defaut rotation 0 degrees
+        zIndex: selectedStone.zIndex + 1,
+        parentStone: selectedStone, // bind prong to selected stone
+        radius: 0, //prong polar coordinates at stone center
+        angle: 0
+      };
+
+      prongs.push(prong);
+      renderAvatar();
+    };
+  }
+
+  // ===== RENDER =====
+  function renderAvatar() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // === GLOBAL SCENE SCALE (applies to EVERYTHING) ===
+    ctx.save();
+    ctx.translate(canvas.width / 2, canvas.height / 2);
+    ctx.scale(sceneScale, sceneScale);
+    ctx.translate(-canvas.width / 2, -canvas.height / 2);
+
+    // === Bands (bottom) ===
+    bands
+      .sort((a, b) => a.zIndex - b.zIndex)
+      .forEach(band => {
+        ctx.save();
+        ctx.translate(band.x, band.y);
+        ctx.rotate(band.rotation);
+        ctx.scale(band.scale, band.scale);
+
+        ctx.drawImage(
+          band.img,
+          -band.img.naturalWidth / 2,
+          -band.img.naturalHeight / 2
+        );
+
+        // BAND SELECTION HIGHLIGHT
+        if (activeObject === band) {
+          ctx.fillStyle = "#00f0ff40";
+          roundRect(
+            ctx,
+            -band.img.naturalWidth / 2,
+            -band.img.naturalHeight / 2,
+            band.img.naturalWidth,
+            band.img.naturalHeight,
+            70 // corner radius - adjust this for more/less rounding
+          );
+          ctx.fill();
+        }
+        ctx.restore();
+
+        updateStatsPanel();
+      });
+
+    // === Stones (middle) ===
+    stones
+      .sort((a, b) => a.zIndex - b.zIndex)
+      .forEach(stone => {
+        ctx.save();
+        ctx.translate(stone.x, stone.y);
+        ctx.rotate(stone.rotation);
+        ctx.scale(stone.scale, stone.scale);
+
+        ctx.drawImage(
+          stone.img,
+          -stone.img.naturalWidth / 2,
+          -stone.img.naturalHeight / 2
+
+        );
+
+        // STONE SELECTION HIGHLIGHT
+        if (selectedStones.includes(stone)) {
+          ctx.fillStyle = "#00f0ff40";
+          ctx.beginPath();
+          ctx.ellipse(
+            0,
+            0,
+            stone.img.naturalWidth / 2,  // Full width radius
+            stone.img.naturalHeight / 2, // Full height radius
+            0,
+            0,
+            Math.PI * 2
+          );
+          ctx.fill();
+        }
+
+        ctx.restore();
+      });
+
+      // === Prongs (top) ===
+      prongs
+        .sort((a, b) => a.zIndex - b.zIndex)
+        .forEach(prong => {
+          ctx.save();
+          ctx.translate(prong.x, prong.y);
+          ctx.rotate(prong.rotation);
+          ctx.scale(prong.scale, prong.scale);
+
+          ctx.drawImage(
+            prong.img,
+            -prong.img.naturalWidth / 2,
+            -prong.img.naturalHeight / 2
+          );
+
+          // PRONG SELECTION HIGHLIGHT
+          if (activeObject === prong) {
+            ctx.fillStyle = "#ff9f0040";
+            ctx.beginPath();
+            ctx.arc(0, 0,
+              Math.max(prong.img.naturalWidth, prong.img.naturalHeight) / 2,
+              0,
+              Math.PI * 2
+            );
+            ctx.fill();
+          }
+
+          ctx.restore();
+        });
+
+    // === END GLOBAL SCENE SCALE ===
+    ctx.restore();
+  }
+
+      // Multiple autimatic prongs
+
+      function getSelectedStone() {
+        return selectedStone;
+      }
+
+      function addFourProngsAroundStone(prongSrc) {
+        const stone = getSelectedStone();
+        if (!stone) return;
+
+        const rx = stone.radiusX;
+        const ry = stone.radiusY;
+
+        const inset = 0.02; // 2% outward
+
+        const angles = [
+          Math.PI / 4,        // top-right
+          (3 * Math.PI) / 4,  // top-left
+          (5 * Math.PI) / 4,  // bottom-left
+          (7 * Math.PI) / 4   // bottom-right
+        ];
+
+        angles.forEach(angle => {
+          const img = new Image();
+          img.src = prongSrc;
+
+          img.onload = () => {
+
+            const targetProngHeight = stone.visualHeight * PRONG_TO_STONE_RATIO;
+            const prongScale = targetProngHeight / img.naturalHeight;
+
+            const prong = {
+              img,
+              scale: prongScale,
+              rotation: angle, // initial rotation
+              zIndex: stone.zIndex + 1,
+              parentStone: stone,
+
+              // Polar coordinates relative to stone
+              angle: angle
+            };
+
+            // initial placement
+            prong.x = stone.x + Math.cos(angle) * rx * (1 - inset);
+            prong.y = stone.y + Math.sin(angle) * ry * (1 - inset);
+
+            // STORE RELATIVE POSITION (RUN ONCE)
+            const dx = prong.x - stone.x;
+            const dy = prong.y - stone.y;
+
+            prong.radius = Math.sqrt(dx * dx + dy * dy);
+            prong.angle = Math.atan2(dy, dx) - stone.rotation;
+
+            prong.rotation = prong.angle;
+
+            prongs.push(prong);
+            renderAvatar();
+          };
+        }); // closes angles.forEach
+      }   // closes addFourProngsAroundStone
+
+
+  // ===== OBJECT INTERACTION =====
+  let dragOffsetX = 0;
+  let dragOffsetY = 0;
+
+  let multiDragOffsets = []; // stores offsets for each selected stone during drag
+
+  canvas.addEventListener("mousedown", e => {
+    if (e.detail > 1) return; // ignore double-click
+    let clickedObject = false;
+
+    const rect = canvas.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+
+    // Check objects from top layer to bottom ( prongs > stone > band )
+    const hitList = [...prongs, ...stones, ...bands].sort((a,b) => b.zIndex - a.zIndex);
+
+    for (const obj of hitList) {
+      let hit = false;
+      if (prongs.includes(obj)) hit = hitTestProng(x,y,obj);
+      else if (stones.includes(obj)) hit = hitTestStone(x,y,obj);
+      else hit = hitTestBand(x,y,obj);
+
+      if (hit) {
+        activeObject = obj;
+        dragOffsetX = x - obj.x;
+        dragOffsetY = y - obj.y;
+
+        // Stone is selected by clicking on it
+        if (stones.includes(obj)) {
+          if (multiSelectMode) {
+            // toggle selection
+            if (!selectedStones.includes(obj)) selectedStones.push(obj);
+          } else {
+            selectedStones = [obj]; // single selected stone
+          }
+
+          selectedStone = selectedStones[0];
+
+          // Setup offsets for all selected stones while dragging
+          multiDragOffsets = selectedStones.map(s => ({
+            stone: s,
+            offsetX: x - s.x,
+            offsetY: y - s.y
+          }));
+        }
+
+        clickedObject = true;
+        break;
+      }
+    }
+
+    if (!clickedObject) selectedStones = [];
+    renderAvatar();
+    updateStatsPanel();
   });
 
+  canvas.addEventListener("mousemove", e => {
+    if (!activeObject) return;
+
+    const rect = canvas.getBoundingClientRect();
+    const newX = e.clientX - rect.left;
+    const newY = e.clientY - rect.top;
+
+    if (stones.includes(activeObject) && selectedStones.includes(activeObject)) {
+      // drag all selected stones
+      multiDragOffsets.forEach(o => {
+        o.stone.x = newX - o.offsetX;
+        o.stone.y = newY - o.offsetY;
+
+        // Only move prongs when Shift is held
+        if (isShiftDown) updateAttachedProngs(o.stone);
+      });
+    } else {
+      // single object drag
+      activeObject.x = newX - dragOffsetX;
+      activeObject.y = newY - dragOffsetY;
+
+      // Only move prongs when Shift is held
+      if (stones.includes(activeObject) && isShiftDown) updateAttachedProngs(activeObject);
+    }
+
+    renderAvatar();
+  });
+
+  canvas.addEventListener("mouseup", () => {
+    if (activeObject && prongs.includes(activeObject)) {
+      const stone = activeObject.parentStone;
+      if (stone) {
+        const dx = activeObject.x - stone.x;
+        const dy = activeObject.y - stone.y;
+
+        activeObject.radius = Math.sqrt(dx * dx + dy * dy);
+        activeObject.angle = Math.atan2(dy, dx) - stone.rotation;
+      }
+    }
+
+    multiDragOffsets = [];
+    activeObject = null;
+
+  });
+
+
+  let isShiftDown = false;
+
+  document.addEventListener("keydown", e => {
+    const isCmdOrCtrl = e.metaKey || e.ctrlKey;
+
+    // SHIFT & multi-select toggle
+    if (e.key === "Shift") isShiftDown = true;
+    if (e.key.toLowerCase() === "b") multiSelectMode = true;// hold b to multi-select
+
+    // ===== COPY (Cmd/Ctrl + C) =====
+    if (isCmdOrCtrl && e.key.toLowerCase() === "c") {
+      // Copy active object (band, stone, or prong)
+      if (activeObject) {
+        clipboard.bands = [];
+        clipboard.stones = [];
+        clipboard.prongs = [];
+
+        if (bands.includes(activeObject)) {
+          // Copy single band
+          clipboard.bands = [{
+            x: activeObject.x,
+            y: activeObject.y,
+            scale: activeObject.scale,
+            rotation: activeObject.rotation,
+            zIndex: activeObject.zIndex,
+            imgSrc: activeObject.img.src,
+            radiusX: activeObject.radiusX,
+            radiusY: activeObject.radiusY,
+            hitShrink: activeObject.hitShrink
+          }];
+        } else if (prongs.includes(activeObject)) {
+          // Copy single prong
+          clipboard.prongs = [{
+            x: activeObject.x,
+            y: activeObject.y,
+            scale: activeObject.scale,
+            rotation: activeObject.rotation,
+            imgSrc: activeObject.img.src,
+            radius: activeObject.radius,
+            angle: activeObject.angle,
+            parentStoneIndex: activeObject.parentStone ? stones.indexOf(activeObject.parentStone) : -1
+          }];
+        }
+      }
+
+      // Copy selected stones and their prongs
+      if (selectedStones.length > 0) {
+        clipboard.stones = selectedStones.map(stone => ({
+          x: stone.x,
+          y: stone.y,
+          scale: stone.scale,
+          rotation: stone.rotation,
+          zIndex: stone.zIndex,
+          imgSrc: stone.img.src,
+          radiusX: stone.radiusX,
+          radiusY: stone.radiusY,
+          visualHeight: stone.visualHeight,
+          hitShrink: stone.hitShrink
+        }));
+
+        // Copy attached prongs
+        clipboard.prongs = prongs
+          .filter(p => selectedStones.includes(p.parentStone))
+          .map(p => ({
+            x: p.x,
+            y: p.y,
+            scale: p.scale,
+            rotation: p.rotation,
+            imgSrc: p.img.src,
+            radius: p.radius,
+            angle: p.angle,
+            parentStoneIndex: selectedStones.indexOf(p.parentStone)
+          }));
+      }
+
+      e.preventDefault();
+      console.log("Copied:", clipboard);
+    }
+
+    // ===== PASTE (Cmd/Ctrl + V) =====
+    if (isCmdOrCtrl && e.key.toLowerCase() === "v") {
+      // Paste bands
+      const newBands = clipboard.bands.map(orig => {
+        const img = new Image();
+        img.src = orig.imgSrc;
+
+        const band = {
+          img,
+          x: orig.x + 20,
+          y: orig.y + 20,
+          scale: orig.scale,
+          rotation: orig.rotation,
+          zIndex: bands.length,
+          radiusX: orig.radiusX,
+          radiusY: orig.radiusY,
+          hitShrink: orig.hitShrink
+        };
+
+        bands.push(band);
+        return band;
+      });
+
+      // Paste stones
+      const newStones = clipboard.stones.map(orig => {
+        const img = new Image();
+        img.src = orig.imgSrc;
+
+        const stone = {
+          img,
+          x: orig.x + 20,
+          y: orig.y + 20,
+          scale: orig.scale,
+          rotation: orig.rotation,
+          zIndex: stones.length,
+          radiusX: orig.radiusX,
+          radiusY: orig.radiusY,
+          visualHeight: orig.visualHeight,
+          hitShrink: orig.hitShrink
+        };
+
+        stones.push(stone);
+        return stone;
+      });
+
+      // Paste prongs
+      const newProngs = clipboard.prongs.map(orig => {
+        const img = new Image();
+        img.src = orig.imgSrc;
+
+        // Check if prong has a parent stone reference
+        const parentStone = orig.parentStoneIndex >= 0 ? newStones[orig.parentStoneIndex] : null;
+
+        const prong = {
+          img,
+          x: orig.x + 20,
+          y: orig.y + 20,
+          scale: orig.scale,
+          rotation: orig.rotation,
+          zIndex: parentStone ? parentStone.zIndex + 1 : prongs.length,
+          parentStone: parentStone,
+          radius: orig.radius,
+          angle: orig.angle
+        };
+
+        // If has parent stone, recalculate position
+        if (parentStone) {
+          prong.x = parentStone.x + prong.radius * Math.cos(prong.angle + parentStone.rotation);
+          prong.y = parentStone.y + prong.radius * Math.sin(prong.angle + parentStone.rotation);
+        }
+
+        prongs.push(prong);
+        return prong;
+      });
+
+      // Select newly pasted items
+      if (newStones.length > 0) {
+        selectedStones = newStones;
+        selectedStone = selectedStones[0];
+      } else if (newBands.length > 0) {
+        activeObject = newBands[0];
+      } else if (newProngs.length > 0) {
+        activeObject = newProngs[0];
+      }
+
+      renderAvatar();
+      e.preventDefault();
+    }
+
+    // ===== CENTER SELECTED OBJECT (press 'x') =====
+    if (e.key.toLowerCase() === "x" && activeObject) {
+      activeObject.x = canvas.width / 2;
+      activeObject.y = canvas.height / 2;
+
+      if (stones.includes(activeObject)) updateAttachedProngs(activeObject);
+
+      // Deselect the object
+      activeObject = null;
+      selectedStones = [];
+      selectedStone = null;
+
+      renderAvatar();
+      e.preventDefault();
+    }
+
+    // ===== OBJECT TRANSFORMS =====
+    if (!activeObject) return;
+
+    // Scale prongs
+    if (prongs.includes(activeObject)) {
+      if (e.key === "+" || e.key === "=") activeObject.scale *= 1.05; // grow 5%
+      if (e.key === "-" || e.key === "_") activeObject.scale *= 0.95; // shrink 5%
+    }
+
+    if (e.key === "ArrowRight") activeObject.rotation += Math.PI / 16;
+    if (e.key === "ArrowLeft") activeObject.rotation -= Math.PI / 16;
+    if (e.key === "ArrowUp") activeObject.zIndex++;
+    if (e.key === "ArrowDown") activeObject.zIndex--;
+    if (e.key === "Backspace") {
+      let list;
+      if (prongs.includes(activeObject)) list = prongs;
+      else if (stones.includes(activeObject)) list = stones;
+      else list = bands;
+      list.splice(list.indexOf(activeObject), 1);
+      activeObject = null;
+    }
+
+    renderAvatar();
+  });
+
+  document.addEventListener("keyup", e => {
+    if (e.key === "Shift") isShiftDown = false;
+    if (e.key.toLowerCase() === "b") multiSelectMode = false; // release B to exit multi-select
+  });
+
+  canvas.addEventListener("dblclick", e => {
+    const rect = canvas.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+
+    selectedStone = null;
+
+    // topmost stone wins
+    const sortedStones = [...stones].sort(
+      (a, b) => b.zIndex - a.zIndex
+    );
+
+    for (const stone of sortedStones) {
+      const dx = (x - stone.x) / stone.radiusX;
+      const dy = (y - stone.y) / stone.radiusY;
+
+      if (dx * dx + dy * dy <= 1) {
+        selectedStone = stone;
+        break;
+      }
+    }
+
+    renderAvatar();
+  });
+
+  // ===== MENUS =====
+  document.querySelectorAll(".expand-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const menu = btn.nextElementSibling;
+      if (menu?.classList.contains("menu-options")) {
+        menu.classList.toggle("show");
+      }
+    });
+  });
 
 </script>
