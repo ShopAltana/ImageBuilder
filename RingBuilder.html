@@ -38,15 +38,19 @@
           }
 
         a{
-            color: #ffb9c0;
-            font-size: 25px;
+            color: #ffefed;
+            font-size: 15px;
             font-weight: bold;
-            margin-left: 27px; /* indent text block 27px*/
-            margin-top: 2px; /* adjusts the top margin */
-            margin-bottom: 30px; /* adjusts the bottom margin */
         }
         a:hover{
             color: #c7525d;
+        }
+        .nav-link{
+            position: fixed;
+            top: 50px;
+            left: 20%;
+            padding: 10px;
+            z-index: 9999;
         }
 
           .instruction { /* What keys do what */
@@ -194,7 +198,7 @@
 
 <body>
     <div class="app">
-        <a href="https://shopaltana.github.io/ImageArchive/ImageArchive.html">← Image Archive</a>
+        <a href="https://shopaltana.github.io/ImageArchive/ImageArchive.html" class="nav-link">← Image Archive</a>
     </div>
     
   <div class="app">
