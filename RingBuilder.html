@@ -106,6 +106,49 @@
           overflow-x: hidden; /* Prevent horizontal scrollbar */
         }
 
+        /* Color Swatch Styles */
+        .color-swatches {
+          display: flex;
+          gap: 5px;
+          flex-wrap: wrap;
+          margin-top: 5px;
+          padding: 5px;
+        }
+
+        .color-swatch {
+          width: 25px;
+          height: 25px;
+          border: 2px solid #da9d94;
+          border-radius: 5px;
+          cursor: pointer;
+          transition: transform 0.2s;
+        }
+
+        .color-swatch:hover {
+          transform: scale(1.1);
+          border-color: #ffb9c0;
+        }
+
+        .color-swatch.active {
+          border: 3px solid #c7525d;
+          transform: scale(1.15);
+        }
+
+        /* Material type selector */
+        .material-selector {
+          margin-top: 10px;
+          padding: 5px;
+        }
+
+        .material-selector select {
+          width: 100%;
+          padding: 5px;
+          border: 2px solid #da9d94;
+          border-radius: 5px;
+          background-color: #f1d2b3;
+          font-size: 12px;
+        }
+
         /* statistics panel */
         .stats-panel {
           background-color: #ffefed;
@@ -201,7 +244,7 @@
     <div class="app">
         <a href="https://shopaltana.github.io/ImageArchive/ImageArchive.html" class="nav-link">← Image Archive</a>
     </div>
-    
+
   <div class="app">
     <div class="instruction">
       <h1> Instructions </h1>
@@ -222,6 +265,7 @@
 
     <div class="sidebar"> <!-- creating an expandable/colapsable sidebar menu -->
       <div class="expandable-menu">
+        <!-- BAND MENU -->
         <button class="expand-btn">Ring Size</button>
         <div class="menu-options">
           <button class="expand-btn">Size 1</button>
@@ -241,6 +285,30 @@
             </div>
           </div>
         </div>
+
+        <!-- BAND COLOR & MATERIAL -->
+        <button class="expand-btn">Band Color & Metal</button>
+        <div class="menu-options">
+          <div class="material-selector">
+            <label style="color: #da9d94; font-size: 12px;">Metal Type:</label>
+            <select id="bandMetalType">
+              <option value="Yellow Gold">Yellow Gold</option>
+              <option value="White Gold">White Gold</option>
+              <option value="Rose Gold">Rose Gold</option>
+              <option value="Platinum">Platinum</option>
+              <option value="Silver">Silver</option>
+            </select>
+          </div>
+          <div class="color-swatches">
+            <div class="color-swatch active" style="background-color: #FFD700;" onclick="setBandColor('#FFD700')" title="Yellow Gold"></div>
+            <div class="color-swatch" style="background-color: #E5E4E2;" onclick="setBandColor('#E5E4E2')" title="White Gold"></div>
+            <div class="color-swatch" style="background-color: #B76E79;" onclick="setBandColor('#B76E79')" title="Rose Gold"></div>
+            <div class="color-swatch" style="background-color: #E5E4E2;" onclick="setBandColor('#C0C0C0')" title="Platinum"></div>
+            <div class="color-swatch" style="background-color: #C0C0C0;" onclick="setBandColor('#A8A9AD')" title="Silver"></div>
+          </div>
+        </div>
+
+        <!-- STONE MENU -->
         <button class="expand-btn">Stones</button>
         <div class="menu-options">
           <button class="expand-btn">Round</button>
@@ -253,12 +321,64 @@
             <button onclick="addStone('RingBuilderImages/Stone/WtOv5x4mm.png')">5 x 4mm</button>
           </div>
         </div>
+
+        <!-- STONE COLOR & TYPE -->
+        <button class="expand-btn">Stone Color & Type</button>
+        <div class="menu-options">
+          <div class="material-selector">
+            <label style="color: #da9d94; font-size: 12px;">Stone Type:</label>
+            <select id="stoneType">
+              <option value="Diamond">Diamond</option>
+              <option value="Ruby">Ruby</option>
+              <option value="Sapphire">Sapphire</option>
+              <option value="Emerald">Emerald</option>
+              <option value="Amethyst">Amethyst</option>
+              <option value="Topaz">Topaz</option>
+              <option value="Aquamarine">Aquamarine</option>
+              <option value="Morganite">Morganite</option>
+            </select>
+          </div>
+          <div class="color-swatches">
+            <div class="color-swatch active" style="background-color: #FFFFFF;" onclick="setStoneColor('#FFFFFF')" title="Diamond/White"></div>
+            <div class="color-swatch" style="background-color: #E0115F;" onclick="setStoneColor('#E0115F')" title="Ruby"></div>
+            <div class="color-swatch" style="background-color: #0F52BA;" onclick="setStoneColor('#0F52BA')" title="Sapphire"></div>
+            <div class="color-swatch" style="background-color: #50C878;" onclick="setStoneColor('#50C878')" title="Emerald"></div>
+            <div class="color-swatch" style="background-color: #9966CC;" onclick="setStoneColor('#9966CC')" title="Amethyst"></div>
+            <div class="color-swatch" style="background-color: #FFD700;" onclick="setStoneColor('#FFD700')" title="Topaz"></div>
+            <div class="color-swatch" style="background-color: #7FFFD4;" onclick="setStoneColor('#7FFFD4')" title="Aquamarine"></div>
+            <div class="color-swatch" style="background-color: #F4C2C2;" onclick="setStoneColor('#F4C2C2')" title="Morganite"></div>
+          </div>
+        </div>
+
+        <!-- PRONG MENU -->
         <button class="expand-btn">Prongs</button>
         <div class="menu-options">
           <button class="expand-btn">Round Prongs</button>
           <div class="menu-options">
             <button onclick="addProng('RingBuilderImages/Prongs/RoundProng.png')">Round Prong</button>
             <button onclick="addFourProngsAroundStone('RingBuilderImages/Prongs/RoundProng.png')">4 Round Prongs</button>
+          </div>
+        </div>
+
+        <!-- PRONG COLOR & MATERIAL -->
+        <button class="expand-btn">Prong Color & Metal</button>
+        <div class="menu-options">
+          <div class="material-selector">
+            <label style="color: #da9d94; font-size: 12px;">Metal Type:</label>
+            <select id="prongMetalType">
+              <option value="Yellow Gold">Yellow Gold</option>
+              <option value="White Gold">White Gold</option>
+              <option value="Rose Gold">Rose Gold</option>
+              <option value="Platinum">Platinum</option>
+              <option value="Silver">Silver</option>
+            </select>
+          </div>
+          <div class="color-swatches">
+            <div class="color-swatch active" style="background-color: #FFD700;" onclick="setProngColor('#FFD700')" title="Yellow Gold"></div>
+            <div class="color-swatch" style="background-color: #E5E4E2;" onclick="setProngColor('#E5E4E2')" title="White Gold"></div>
+            <div class="color-swatch" style="background-color: #B76E79;" onclick="setProngColor('#B76E79')" title="Rose Gold"></div>
+            <div class="color-swatch" style="background-color: #C0C0C0;" onclick="setProngColor('#C0C0C0')" title="Platinum"></div>
+            <div class="color-swatch" style="background-color: #A8A9AD;" onclick="setProngColor('#A8A9AD')" title="Silver"></div>
           </div>
         </div>
       </div>
@@ -283,13 +403,228 @@
   const canvas = document.getElementById("avatar");
   const ctx = canvas.getContext("2d");
 
+  // ===== COLOR MANAGEMENT =====
+  let currentBandColor = '#FFD700'; // Default: Yellow Gold
+  let currentStoneColor = '#FFFFFF'; // Default: White/Diamond
+  let currentProngColor = '#FFD700'; // Default: Yellow Gold
+
+  let currentBandMetal = 'Yellow Gold';
+  let currentStoneType = 'Diamond';
+  let currentProngMetal = 'Yellow Gold';
+
+  function setBandColor(color) {
+    currentBandColor = color;
+
+    // Update metal type based on color
+    const metalMap = {
+      '#FFD700': 'Yellow Gold',
+      '#E5E4E2': 'White Gold',
+      '#B76E79': 'Rose Gold',
+      '#C0C0C0': 'Platinum',
+      '#A8A9AD': 'Silver'
+    };
+
+    currentBandMetal = metalMap[color] || 'Yellow Gold';
+    document.getElementById('bandMetalType').value = currentBandMetal;
+
+    // Update active swatch
+    document.querySelectorAll('.color-swatches .color-swatch').forEach(swatch => {
+      if (swatch.onclick && swatch.onclick.toString().includes('setBandColor')) {
+        swatch.classList.remove('active');
+        if (swatch.style.backgroundColor === rgbToHex(color) ||
+            swatch.style.backgroundColor.toLowerCase() === color.toLowerCase()) {
+          swatch.classList.add('active');
+        }
+      }
+    });
+
+    if (selectedObject && bands.includes(selectedObject)) {
+        selectedObject.color = color;
+        selectedObject.metalType = currentBandMetal;
+    } else {
+      currentBandColor = color;
+    }
+
+    renderAvatar();
+
+  }
+
+  function setStoneColor(color) {
+    currentStoneColor = color;
+
+    // Update stone type based on color
+    const stoneMap = {
+      '#FFFFFF': 'Diamond',
+      '#E0115F': 'Ruby',
+      '#0F52BA': 'Sapphire',
+      '#50C878': 'Emerald',
+      '#9966CC': 'Amethyst',
+      '#FFD700': 'Topaz',
+      '#7FFFD4': 'Aquamarine',
+      '#F4C2C2': 'Morganite'
+    };
+
+    currentStoneType = stoneMap[color] || 'Diamond';
+    document.getElementById('stoneType').value = currentStoneType;
+
+    // Update active swatch
+    document.querySelectorAll('.color-swatches .color-swatch').forEach(swatch => {
+      if (swatch.onclick && swatch.onclick.toString().includes('setStoneColor')) {
+        swatch.classList.remove('active');
+        if (swatch.style.backgroundColor === rgbToHex(color) ||
+            swatch.style.backgroundColor.toLowerCase() === color.toLowerCase()) {
+          swatch.classList.add('active');
+        }
+      }
+    });
+
+    if (selectedStones.length > 0) {
+      selectedStones.forEach(stone => {
+        stone.color = color;
+        stone.stoneType = currentStoneType;
+      });
+    } else {
+      currentStoneColor = color;
+    }
+
+    renderAvatar();
+
+  }
+
+  function setProngColor(color) {
+    currentProngColor = color;
+
+    // Update metal type based on color
+    const metalMap = {
+      '#FFD700': 'Yellow Gold',
+      '#E5E4E2': 'White Gold',
+      '#B76E79': 'Rose Gold',
+      '#C0C0C0': 'Platinum',
+      '#A8A9AD': 'Silver'
+    };
+
+    currentProngMetal = metalMap[color] || 'Yellow Gold';
+    document.getElementById('prongMetalType').value = currentProngMetal;
+
+    // Update active swatch
+    document.querySelectorAll('.color-swatches .color-swatch').forEach(swatch => {
+      if (swatch.onclick && swatch.onclick.toString().includes('setProngColor')) {
+        swatch.classList.remove('active');
+        if (swatch.style.backgroundColor === rgbToHex(color) ||
+            swatch.style.backgroundColor.toLowerCase() === color.toLowerCase()) {
+          swatch.classList.add('active');
+        }
+      }
+    });
+
+    if (selectedObject && prongs.includes(selectedObject)) {
+        selectedObject.color = color;
+        selectedObject.metalType = currentProngMetal;
+    } else {
+      currentProngColor = color;
+    }
+
+    renderAvatar();
+
+  }
+
+  // Helper to convert RGB to Hex
+  function rgbToHex(color) {
+    if (color.startsWith('#')) return color.toUpperCase();
+
+    const rgb = color.match(/\d+/g);
+    if (!rgb) return color;
+
+    return '#' + rgb.map(x => {
+      const hex = parseInt(x).toString(16);
+      return hex.length === 1 ? '0' + hex : hex;
+    }).join('').toUpperCase();
+  }
+
+  // Listen to dropdown changes
+  document.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('bandMetalType')?.addEventListener('change', (e) => {
+      currentBandMetal = e.target.value;
+
+      if (activeObject && bands.includes(activeObject)) {
+        activeObject.metalType = currentBandMetal;
+      }
+
+      renderAvatar();
+    });
+
+    document.getElementById('stoneType')?.addEventListener('change', (e) => {
+      currentStoneType = e.target.value;
+
+      if (selectedStones.length > 0) {
+        selectedStones.forEach(stone => {
+          stone.stoneType = currentStoneType;
+        });
+      }
+
+      renderAvatar();
+    });
+
+    document.getElementById('prongMetalType')?.addEventListener('change', (e) => {
+      currentProngMetal = e.target.value;
+
+      if (activeObject && prongs.includes(activeObject)) {
+        activeObject.metalType = currentProngMetal;
+      }
+
+      renderAvatar();
+    });
+  });
+
+  // Apply color tint to image (preserves transparency)
+  function applyColorTint(ctx, img, x, y, width, height, color, materialType) {
+
+    const tempCanvas = document.createElement("canvas");
+    tempCanvas.width = width;
+    tempCanvas.height = height;
+    const tctx = tempCanvas.getContext("2d");
+
+    // Draw original image
+    tctx.drawImage(img, 0, 0, width, height);
+
+    // Apply color
+    if (materialType === "metal") {
+
+      tctx.globalCompositeOperation = "multiply";
+      tctx.fillStyle = color;
+      tctx.fillRect(0, 0, width, height);
+
+      tctx.globalCompositeOperation = "screen";
+      tctx.fillStyle = "rgba(255,255,255,0.25)";
+      tctx.fillRect(0, 0, width, height);
+    }
+
+    if (materialType === "stone") {
+      tctx.globalCompositeOperation = "color";
+      tctx.fillStyle = color;
+      tctx.fillRect(0, 0, width, height);
+    }
+
+    // CRITICAL: Restore original alpha mask
+    tctx.globalCompositeOperation = "destination-in";
+    tctx.drawImage(img, 0, 0, width, height);
+
+    // Draw final result to main canvas
+    ctx.drawImage(tempCanvas, x, y);
+  }
+
+
+
+
   // ===== STATE =====
   const bands = [];
   const stones = [];
   const prongs = [];
 
   let selectedStones = []; // for selecting stones / allow for multiple stone selection
+  let selectedStone = null; // singular selected stone for prong attachment
   let activeObject = null; // for dragging
+  let selectedObject = null; // persistent selection
 
   let multiSelectMode = false; // toggled by 'b'
 
@@ -301,14 +636,8 @@
 
 
   // ===== HELPERS =====
-  function createBand(src) {
-    const img = new Image();
-    img.src = src + '?v=' + Date.now(); // Adds timestamp to bypass cache
-    // ... rest
-  }
-
   function normalizeScale(img) {
-    return 0.3
+    return 0.3;
   }
 
   function normalizeBandScale(img) {
@@ -372,6 +701,8 @@
       'S1W16H17Band.png': { type: 'band', width: 1.6, height: 1.7, ringSize: 1 },
       'S1W16H18Band.png': { type: 'band', width: 1.6, height: 1.8, ringSize: 1 },
 
+      'S14W16H16Band.png': { type: 'band', width: 1.6, height: 1.8, ringSize: 14 },
+
       // Stones: Size format [length_mm, width_mm, shape]
       'WtOv7x5mm.png': { type: 'stone', shape: 'Oval', length: 7, width: 5 },
       'WtOv5x4mm.png': { type: 'stone', shape: 'Oval', length: 5, width: 4 },
@@ -405,19 +736,16 @@
       y: canvas.height / 2,
       scale: 1,
       rotation: 0,
-      zIndex: bands.length
+      zIndex: bands.length,
+      color: currentBandColor,
+      metalType: currentBandMetal
     };
 
     img.onload = () => {
       band.scale = normalizeBandScale(img);
-
-      // BAND SHAPE/RADIOUS (ellipse, not square image box)
       band.radiusX = (img.naturalWidth * band.scale) / 2;
       band.radiusY = (img.naturalHeight * band.scale) / 2;
-
-      // THE CLICKABLE AREA of the band is 100% of its radius
       band.hitShrink = 1;
-
       renderAvatar();
     };
 
@@ -439,25 +767,26 @@
       y: canvas.height / 2,
       scale: 1,
       rotation: 0,
-      zIndex: stones.length
+      zIndex: stones.length,
+      color: currentStoneColor,
+      stoneType: currentStoneType
     };
 
     img.onload = () => {
       stone.scale = normalizeScale(img, 1);
 
-      // STONE SHAPE/RADIOUS (ellipse, not square image box)
+      // Stone shape/radious is elipse not square image box
       stone.radiusX = (img.naturalWidth * stone.scale) / 2;
       stone.radiusY = (img.naturalHeight * stone.scale) / 2;
 
-      // THE CLICKABLE AREA of the stone is 100% of its radius
+      //Clickable area of the stone is 100% of its radious
       stone.hitShrink = 1;
 
-      // BASE SIZE for proportional scaling of other eliments
+      // Base size for proportional scaleing of other eliments
       stone.visualHeight = img.naturalHeight * stone.scale;
 
       renderAvatar();
     };
-
 
     return stone;
   }
@@ -480,9 +809,9 @@
       bands.forEach(band => {
         const metadata = getImageMetadata(band.img.src);
         if (metadata) {
-          const key = `${metadata.ringSize}-${metadata.width}-${metadata.height}`;
+          const key = `${metadata.ringSize}-${metadata.width}-${metadata.height}-${band.metalType}`;
           if (!bandGroups[key]) {
-            bandGroups[key] = { count: 0, metadata };
+            bandGroups[key] = { count: 0, metadata, metalType: band.metalType };
           }
           bandGroups[key].count++;
         }
@@ -490,7 +819,8 @@
 
       Object.values(bandGroups).forEach(group => {
         const m = group.metadata;
-        html += `<div class="stat-item">(${group.count}) Size ${m.ringSize}, ${m.width}mm W x ${m.height}mm H</div>`;
+        html += `<div class="stat-item">(${group.count}) Size ${m.ringSize}, ${m.width}mm W x ${m.height}mm H<br>`;
+        html += `<span style="margin-left: 15px; color: #c7525d;">${group.metalType}</span></div>`;
       });
 
       html += '</div>';
@@ -505,12 +835,11 @@
 
         if (metadata) {
           if (metadata.diameter) {
-            html += `<div class="stat-item">${metadata.shape} ${metadata.diameter}mm</div>`;
+            html += `<div class="stat-item">${metadata.shape} ${metadata.diameter}mm<br>`;
           } else {
-            html += `<div class="stat-item">${metadata.shape} ${metadata.length} x ${metadata.width}mm</div>`;
+            html += `<div class="stat-item">${metadata.shape} ${metadata.length} x ${metadata.width}mm<br>`;
           }
-        } else {
-          html += `<div class="stat-item">Stone ${index + 1} (no metadata)</div>`;
+          html += `<span style="margin-left: 15px; color: #c7525d;">${stone.stoneType}</span></div>`;
         }
 
         // Prongs attached to this stone
@@ -522,18 +851,19 @@
           const prongGroups = {};
           attachedProngs.forEach(p => {
             const prongMetadata = getImageMetadata(p.img.src);
-            const sizeMM = (p.img.naturalWidth * p.scale * 0.0442).toFixed(2);
+            const sizeMM = (p.img.naturalWidth * p.scale * 0.0442).toFixed(2); //adjust prong size
             const shape = prongMetadata ? prongMetadata.shape : 'Unknown';
-            const key = `${shape}-${sizeMM}`;
+            const key = `${shape}-${sizeMM}-${p.metalType}`;
 
             if (!prongGroups[key]) {
-              prongGroups[key] = { count: 0, shape, sizeMM };
+              prongGroups[key] = { count: 0, shape, sizeMM, metalType: p.metalType };
             }
             prongGroups[key].count++;
           });
 
           Object.values(prongGroups).forEach(group => {
-            html += `<div class="stat-item" style="margin-left: 30px;">(${group.count}) ${group.shape} ${group.sizeMM}mm</div>`;
+            html += `<div class="stat-item" style="margin-left: 30px;">(${group.count}) ${group.shape} ${group.sizeMM}mm<br>`;
+              html += `<span style="margin-left: 45px; color: #c7525d;">${group.metalType}</span></div>`;
           });
         }
       });
@@ -548,16 +878,17 @@
           const prongMetadata = getImageMetadata(p.img.src);
           const sizeMM = (p.img.naturalWidth * p.scale * 0.01).toFixed(2);
           const shape = prongMetadata ? prongMetadata.shape : 'Unknown';
-          const key = `${shape}-${sizeMM}`;
+          const key = `${shape}-${sizeMM}-${p.metalType}`;
 
           if (!prongGroups[key]) {
-            prongGroups[key] = { count: 0, shape, sizeMM };
+            prongGroups[key] = { count: 0, shape, sizeMM, metalType: p.metalType };
           }
           prongGroups[key].count++;
         });
 
         Object.values(prongGroups).forEach(group => {
-          html += `<div class="stat-item" style="margin-left: 15px;">(${group.count}) ${group.shape} ${group.sizeMM}mm</div>`;
+          html += `<div class="stat-item" style="margin-left: 15px;">(${group.count}) ${group.shape} ${group.sizeMM}mm<br>`;
+            html += `<span style="margin-left: 45px; color: #c7525d;">${group.metalType}</span></div>`;
         });
       }
 
@@ -583,11 +914,8 @@
     img.src = src;
 
     img.onload = () => {
-      const targetProngHeight =
-        selectedStone.visualHeight * PRONG_TO_STONE_RATIO;
-
-      const prongScale =
-        targetProngHeight / img.naturalHeight;
+      const targetProngHeight = selectedStone.visualHeight * PRONG_TO_STONE_RATIO;
+      const prongScale = targetProngHeight / img.naturalHeight;
 
       const prong = {
         img,
@@ -598,7 +926,9 @@
         zIndex: selectedStone.zIndex + 1,
         parentStone: selectedStone, // bind prong to selected stone
         radius: 0, //prong polar coordinates at stone center
-        angle: 0
+        angle: 0,
+        color: currentProngColor,
+        metalType: currentProngMetal
       };
 
       prongs.push(prong);
@@ -625,28 +955,21 @@
         ctx.rotate(band.rotation);
         ctx.scale(band.scale, band.scale);
 
-        ctx.drawImage(
-          band.img,
-          -band.img.naturalWidth / 2,
-          -band.img.naturalHeight / 2
-        );
+        // Apply color tint
+        const x = -band.img.naturalWidth / 2;
+        const y = -band.img.naturalHeight / 2;
+        applyColorTint(ctx, band.img, x, y, band.img.naturalWidth, band.img.naturalHeight, band.color, "metal");
+
 
         // BAND SELECTION HIGHLIGHT
-        if (activeObject === band) {
+        if (selectedObject === band) {
           ctx.fillStyle = "#00f0ff40";
-          roundRect(
-            ctx,
-            -band.img.naturalWidth / 2,
-            -band.img.naturalHeight / 2,
-            band.img.naturalWidth,
-            band.img.naturalHeight,
-            70 // corner radius - adjust this for more/less rounding
-          );
+          const x = -band.img.naturalWidth / 2;
+          const y = -band.img.naturalHeight / 2;
+          roundRect(ctx, x, y, band.img.naturalWidth, band.img.naturalHeight, 70);
           ctx.fill();
         }
         ctx.restore();
-
-        updateStatsPanel();
       });
 
     // === Stones (middle) ===
@@ -658,64 +981,50 @@
         ctx.rotate(stone.rotation);
         ctx.scale(stone.scale, stone.scale);
 
-        ctx.drawImage(
-          stone.img,
-          -stone.img.naturalWidth / 2,
-          -stone.img.naturalHeight / 2
-
-        );
+        // Apply color tint
+        const x = -stone.img.naturalWidth / 2;
+        const y = -stone.img.naturalHeight / 2;
+        applyColorTint(ctx, stone.img, x, y, stone.img.naturalWidth, stone.img.naturalHeight, stone.color, "stone");
 
         // STONE SELECTION HIGHLIGHT
         if (selectedStones.includes(stone)) {
           ctx.fillStyle = "#00f0ff40";
           ctx.beginPath();
-          ctx.ellipse(
-            0,
-            0,
-            stone.img.naturalWidth / 2,  // Full width radius
-            stone.img.naturalHeight / 2, // Full height radius
-            0,
-            0,
-            Math.PI * 2
-          );
+          ctx.ellipse(0, 0, stone.img.naturalWidth / 2, stone.img.naturalHeight / 2, 0, 0, Math.PI * 2);
           ctx.fill();
         }
 
         ctx.restore();
       });
 
-      // === Prongs (top) ===
-      prongs
-        .sort((a, b) => a.zIndex - b.zIndex)
-        .forEach(prong => {
-          ctx.save();
-          ctx.translate(prong.x, prong.y);
-          ctx.rotate(prong.rotation);
-          ctx.scale(prong.scale, prong.scale);
+    // === Prongs (top) ===
+    prongs
+      .sort((a, b) => a.zIndex - b.zIndex)
+      .forEach(prong => {
+        ctx.save();
+        ctx.translate(prong.x, prong.y);
+        ctx.rotate(prong.rotation);
+        ctx.scale(prong.scale, prong.scale);
 
-          ctx.drawImage(
-            prong.img,
-            -prong.img.naturalWidth / 2,
-            -prong.img.naturalHeight / 2
-          );
+        // Apply color tint
+        const x = -prong.img.naturalWidth / 2;
+        const y = -prong.img.naturalHeight / 2;
+        applyColorTint(ctx, prong.img, x, y, prong.img.naturalWidth, prong.img.naturalHeight, prong.color, "metal");
 
-          // PRONG SELECTION HIGHLIGHT
-          if (activeObject === prong) {
-            ctx.fillStyle = "#ff9f0040";
-            ctx.beginPath();
-            ctx.arc(0, 0,
-              Math.max(prong.img.naturalWidth, prong.img.naturalHeight) / 2,
-              0,
-              Math.PI * 2
-            );
-            ctx.fill();
-          }
+        // PRONG SELECTION HIGHLIGHT
+        if (selectedObject === prong) {
+          ctx.fillStyle = "#ff9f0040";
+          ctx.beginPath();
+          ctx.arc(0, 0, Math.max(prong.img.naturalWidth, prong.img.naturalHeight) / 2, 0, Math.PI * 2);
+          ctx.fill();
+        }
 
-          ctx.restore();
-        });
+        ctx.restore();
+      });
 
     // === END GLOBAL SCENE SCALE ===
     ctx.restore();
+    updateStatsPanel();
   }
 
       // Multiple autimatic prongs
@@ -755,9 +1064,9 @@
               rotation: angle, // initial rotation
               zIndex: stone.zIndex + 1,
               parentStone: stone,
-
-              // Polar coordinates relative to stone
-              angle: angle
+              angle: angle, // Polar coordinates relative to stone
+              color: currentProngColor,
+              metalType: currentProngMetal
             };
 
             // initial placement
@@ -805,6 +1114,7 @@
 
       if (hit) {
         activeObject = obj;
+        selectedObject = obj;
         dragOffsetX = x - obj.x;
         dragOffsetY = y - obj.y;
 
@@ -832,7 +1142,13 @@
       }
     }
 
-    if (!clickedObject) selectedStones = [];
+    if (!clickedObject) {
+      selectedStones = [];
+      selectedStone = null;
+      selectedObject = null;
+      activeObject = null;
+    }
+
     renderAvatar();
     updateStatsPanel();
   });
@@ -911,7 +1227,10 @@
             imgSrc: activeObject.img.src,
             radiusX: activeObject.radiusX,
             radiusY: activeObject.radiusY,
-            hitShrink: activeObject.hitShrink
+            hitShrink: activeObject.hitShrink,
+            color: activeObject.color,
+            metalType: activeObject.metalType
+
           }];
         } else if (prongs.includes(activeObject)) {
           // Copy single prong
@@ -923,6 +1242,8 @@
             imgSrc: activeObject.img.src,
             radius: activeObject.radius,
             angle: activeObject.angle,
+            color: activeObject.color,
+            metalType: activeObject.metalType,
             parentStoneIndex: activeObject.parentStone ? stones.indexOf(activeObject.parentStone) : -1
           }];
         }
@@ -940,7 +1261,10 @@
           radiusX: stone.radiusX,
           radiusY: stone.radiusY,
           visualHeight: stone.visualHeight,
-          hitShrink: stone.hitShrink
+          hitShrink: stone.hitShrink,
+          color: activeObject.color,
+          metalType: activeObject.metalType
+
         }));
 
         // Copy attached prongs
@@ -978,7 +1302,10 @@
           zIndex: bands.length,
           radiusX: orig.radiusX,
           radiusY: orig.radiusY,
-          hitShrink: orig.hitShrink
+          hitShrink: orig.hitShrink,
+          color: orig.color,
+          metalType: orig.metalType,
+
         };
 
         bands.push(band);
@@ -1000,7 +1327,10 @@
           radiusX: orig.radiusX,
           radiusY: orig.radiusY,
           visualHeight: orig.visualHeight,
-          hitShrink: orig.hitShrink
+          hitShrink: orig.hitShrink,
+          color: orig.color,
+          stoneType: orig.stoneType
+
         };
 
         stones.push(stone);
@@ -1024,7 +1354,10 @@
           zIndex: parentStone ? parentStone.zIndex + 1 : prongs.length,
           parentStone: parentStone,
           radius: orig.radius,
-          angle: orig.angle
+          angle: orig.angle,
+          color: orig.color,
+          metalType: orig.metalType
+
         };
 
         // If has parent stone, recalculate position
