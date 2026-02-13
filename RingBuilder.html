@@ -300,11 +300,11 @@
             </select>
           </div>
           <div class="color-swatches">
-            <div class="color-swatch active" style="background-color: #FFD700;" onclick="setBandColor('#FFD700')" title="Yellow Gold"></div>
-            <div class="color-swatch" style="background-color: #E5E4E2;" onclick="setBandColor('#E5E4E2')" title="White Gold"></div>
-            <div class="color-swatch" style="background-color: #B76E79;" onclick="setBandColor('#B76E79')" title="Rose Gold"></div>
-            <div class="color-swatch" style="background-color: #E5E4E2;" onclick="setBandColor('#C0C0C0')" title="Platinum"></div>
-            <div class="color-swatch" style="background-color: #C0C0C0;" onclick="setBandColor('#A8A9AD')" title="Silver"></div>
+            <div class="color-swatch active" style="background-color: #FFD97A;" onclick="setBandColor('#FFD97A')" title="Yellow Gold"></div>
+            <div class="color-swatch" style="background-color: #F1E2C6;" onclick="setBandColor('#F1E2C6')" title="White Gold"></div>
+            <div class="color-swatch" style="background-color: #FFC299;" onclick="setBandColor('#FFC299')" title="Rose Gold"></div>
+            <div class="color-swatch" style="background-color: #F1F1F1;" onclick="setBandColor('#F1F1F1')" title="Platinum"></div>
+            <div class="color-swatch" style="background-color: #DFDFDF;" onclick="setBandColor('#DFDFDF')" title="Silver"></div>
           </div>
         </div>
 
@@ -313,12 +313,12 @@
         <div class="menu-options">
           <button class="expand-btn">Round</button>
           <div class="menu-options">
-            <button onclick="addStone('RingBuilderImages/Stone/WtRd6mm.png')">6mm</button>
+            <button onclick="addStone('RingBuilderImages/Stone/Rd6mm.png')">6mm</button>
           </div>
           <button class="expand-btn">Oval</button>
           <div class="menu-options">
-            <button onclick="addStone('RingBuilderImages/Stone/WtOv7x5mm.png')">7 x 5mm</button>
-            <button onclick="addStone('RingBuilderImages/Stone/WtOv5x4mm.png')">5 x 4mm</button>
+            <button onclick="addStone('RingBuilderImages/Stone/Ov7x5mm.png')">7 x 5mm</button>
+            <button onclick="addStone('RingBuilderImages/Stone/Ov5x4mm.png')">5 x 4mm</button>
           </div>
         </div>
 
@@ -374,11 +374,11 @@
             </select>
           </div>
           <div class="color-swatches">
-            <div class="color-swatch active" style="background-color: #FFD700;" onclick="setProngColor('#FFD700')" title="Yellow Gold"></div>
-            <div class="color-swatch" style="background-color: #E5E4E2;" onclick="setProngColor('#E5E4E2')" title="White Gold"></div>
-            <div class="color-swatch" style="background-color: #B76E79;" onclick="setProngColor('#B76E79')" title="Rose Gold"></div>
-            <div class="color-swatch" style="background-color: #C0C0C0;" onclick="setProngColor('#C0C0C0')" title="Platinum"></div>
-            <div class="color-swatch" style="background-color: #A8A9AD;" onclick="setProngColor('#A8A9AD')" title="Silver"></div>
+            <div class="color-swatch active" style="background-color: #FFD97A;" onclick="setProngColor('#FFD97A')" title="Yellow Gold"></div>
+            <div class="color-swatch" style="background-color: #F1E2C6;" onclick="setProngColor('#F1E2C6')" title="White Gold"></div>
+            <div class="color-swatch" style="background-color: #FFC299;" onclick="setProngColor('#FFC299')" title="Rose Gold"></div>
+            <div class="color-swatch" style="background-color: #F1F1F1;" onclick="setProngColor('#F1F1F1')" title="Platinum"></div>
+            <div class="color-swatch" style="background-color: #DFDFDF;" onclick="setProngColor('#DFDFDF')" title="Silver"></div>
           </div>
         </div>
       </div>
@@ -417,11 +417,11 @@
 
     // Update metal type based on color
     const metalMap = {
-      '#FFD700': 'Yellow Gold',
-      '#E5E4E2': 'White Gold',
-      '#B76E79': 'Rose Gold',
-      '#C0C0C0': 'Platinum',
-      '#A8A9AD': 'Silver'
+      '#FFD97A': 'Yellow Gold',
+      '#F1E2C6': 'White Gold',
+      '#FFC299': 'Rose Gold',
+      '#F1F1F1': 'Platinum',
+      '#DFDFDF': 'Silver'
     };
 
     currentBandMetal = metalMap[color] || 'Yellow Gold';
@@ -496,11 +496,11 @@
 
     // Update metal type based on color
     const metalMap = {
-      '#FFD700': 'Yellow Gold',
-      '#E5E4E2': 'White Gold',
-      '#B76E79': 'Rose Gold',
-      '#C0C0C0': 'Platinum',
-      '#A8A9AD': 'Silver'
+      '#FFD97A': 'Yellow Gold',
+      '#F1E2C6': 'White Gold',
+      '#FFC299': 'Rose Gold',
+      '#F1F1F1': 'Platinum',
+      '#DFDFDF': 'Silver'
     };
 
     currentProngMetal = metalMap[color] || 'Yellow Gold';
@@ -590,19 +590,18 @@
     // Apply color
     if (materialType === "metal") {
 
-      tctx.globalCompositeOperation = "multiply";
-      tctx.fillStyle = color;
-      tctx.fillRect(0, 0, width, height);
-
-      tctx.globalCompositeOperation = "screen";
-      tctx.fillStyle = "rgba(255,255,255,0.25)";
+      // 1) Color the metal (respecting the PNG’s shading)
+      tctx.globalCompositeOperation = "overlay"; // paint only where pixels exist
+      tctx.fillStyle = color;                        // e.g. "#868686"
       tctx.fillRect(0, 0, width, height);
     }
 
     if (materialType === "stone") {
-      tctx.globalCompositeOperation = "color";
-      tctx.fillStyle = color;
+      // 1) Color the stone (respecting the PNG’s shading)
+      tctx.globalCompositeOperation = "overlay"; // paint only where pixels exist
+      tctx.fillStyle = color;                        // e.g. "#868686"
       tctx.fillRect(0, 0, width, height);
+
     }
 
     // CRITICAL: Restore original alpha mask
@@ -704,9 +703,9 @@
       'S14W16H16Band.png': { type: 'band', width: 1.6, height: 1.8, ringSize: 14 },
 
       // Stones: Size format [length_mm, width_mm, shape]
-      'WtOv7x5mm.png': { type: 'stone', shape: 'Oval', length: 7, width: 5 },
-      'WtOv5x4mm.png': { type: 'stone', shape: 'Oval', length: 5, width: 4 },
-      'WtRd6mm.png': { type: 'stone', shape: 'Round', diameter: 6 },
+      'Ov7x5mm.png': { type: 'stone', shape: 'Oval', length: 7, width: 5 },
+      'Ov5x4mm.png': { type: 'stone', shape: 'Oval', length: 5, width: 4 },
+      'Rd6mm.png': { type: 'stone', shape: 'Round', diameter: 6 },
 
       // Prongs
       'RoundProng.png': { type: 'prong', shape: 'Round' }
