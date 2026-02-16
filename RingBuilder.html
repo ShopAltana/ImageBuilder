@@ -1359,8 +1359,18 @@
             highlightCanvas.height = band.img.naturalHeight;
             const hctx = highlightCanvas.getContext("2d");
 
+            hctx.drawImage(band.img, 0, 0); // Draw base image
+
+            // Apply swatch color tint (purly asthetcs)
+            hctx.globalCompositeOperation = "overlay";
+            hctx.fillStyle = band.color;
+            hctx.fillRect(0, 0, highlightCanvas.width, highlightCanvas.height);
+
+            // Restore alpha mask
+            hctx.globalCompositeOperation = "destination-in";
             hctx.drawImage(band.img, 0, 0);
 
+            // Apply highlight on top of swatch colored image (purly for asthetics)
             hctx.globalCompositeOperation = "source-atop";
             hctx.fillStyle = "#da9d9440";
             hctx.fillRect(0, 0, highlightCanvas.width, highlightCanvas.height);
@@ -1393,6 +1403,21 @@
 
             hctx.drawImage(stone.img, 0, 0);
 
+            // Apply hex or image overlay
+            if (stone.overlayImage && stone.overlayImage.complete && stone.overlayImage.naturalWidth > 0) {
+                hctx.globalCompositeOperation = "overlay";
+                hctx.drawImage(stone.overlayImage, 0, 0, highlightCanvas.width, highlightCanvas.height);
+            } else if (stone.color && (stone.color.startsWith('#') || stone.color.startsWith('rgb'))) {
+                hctx.globalCompositeOperation = "overlay";
+                hctx.fillStyle = stone.color;
+                hctx.fillRect(0, 0, highlightCanvas.width, highlightCanvas.height);
+            }
+
+            // Restore alpha mask
+            hctx.globalCopositeOperation = "destination-in";
+            hctx.drawImage(stone.img, 0, 0);
+
+            // source-atop highlight
             hctx.globalCompositeOperation = "source-atop"; // ignores "empty" pixel space
             hctx.fillStyle = "#da9d9440"; // highlight color
             hctx.fillRect(0, 0, highlightCanvas.width, highlightCanvas.height);
@@ -1424,6 +1449,13 @@
             highlightCanvas.height = prong.img.naturalHeight;
             const hctx = highlightCanvas.getContext("2d");
 
+            hctx.drawImage(prong.img, 0, 0);
+
+            hctx.globalCompositeOperation = "overlay";
+            hctx.fillStyle = prong.color;
+            hctx.fillRect(0, 0, highlightCanvas.width, highlightCanvas.height);
+
+            hctx.globalCompositeOperation = "destination-in";
             hctx.drawImage(prong.img, 0, 0);
 
             hctx.globalCompositeOperation = "source-atop";
