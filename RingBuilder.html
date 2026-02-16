@@ -695,10 +695,33 @@
       swatchContainer.appendChild(swatch);
     });
 
-    // Set the first color as current
-    if (palette.length > 0) {
-      currentStoneColor = palette[0].color;
-    }
+    // Set the first color as current and update selected stone when switched
+      if (palette.length > 0) {
+          currentStoneColor = palette[0].color;
+
+          const selectedStonesList = selectedObjects.filter(o => stones.includes(o));
+          if (selectedStonesList.length > 0) {
+              selectedStonesList.forEach(stone => {
+                  stone.color = palette[0].color;
+
+                  // Load overlay if swatch uses one
+                  if (palette[0].image) {
+                      const overlayImg = new Image();
+                      overlayImg.src = palette[0].image;
+                      overlayImg.onload = () => renderAvatar();
+                      overlayImg.onerror = () => {
+                          console.error("Failed to load overlay:", palette[0].image);
+                          stone.overlayImage = null;
+                          renderAvatar();
+                      };
+                      stone.overlayImage = overlayImg;
+                  } else {
+                      stone.overlayImage = null;
+                  }
+              });
+              renderAvatar();
+          }
+      }
   }
 
 
@@ -775,6 +798,27 @@
       if (selectedStonesList.length > 0) {
         selectedStonesList.forEach(stone => {
           stone.stoneType = currentStoneType;
+
+            // Also update the stones color to the first swatch upon changing stone type
+            const palette = stoneColorPalettes[currentStoneType] || stoneColorPalettes['Diamond'];
+            if (palette.length > 0) {
+                stone.color = palette[0].color;
+
+                // New color overlay image
+                if (palette[0].image) {
+                    const overlayImg = new Image();
+                    overlayImg.src = palette[0].image;
+                    overlayImg.onload = () => renderAvatar();
+                    overlayImg.onerror = () => {
+                        console.error("Failed to load overlay:", palette[0].image);
+                        stone.overlayImage = null;
+                        renderAvatar();
+                    };
+                    stone.overlayImage = overlayImg;
+                } else {
+                    stone.overlayImage = null;
+                }
+            }
         });
       }
 
@@ -793,49 +837,53 @@
 
     updateStoneColorSwatches('Diamond');
   });
+    // Apply color tint to image (preserves transparency)
+    function applyColorTint(ctx, img, x, y, width, height, color, materialType, overlayImage = null) {
 
-  // Apply color tint to image (preserves transparency)
-  function applyColorTint(ctx, img, x, y, width, height, color, materialType, overlayImage = null) {
-
-    const tempCanvas = document.createElement("canvas");
-    tempCanvas.width = width;
-    tempCanvas.height = height;
-    const tctx = tempCanvas.getContext("2d");
-
-    // Draw original image
-    tctx.drawImage(img, 0, 0, width, height);
-
-    // Apply color
-    if (materialType === "metal") {
-
-      // 1) Color the metal (respecting the PNG’s shading)
-      tctx.globalCompositeOperation = "overlay"; // paint only where pixels exist
-      tctx.fillStyle = color;                        // e.g. "#868686"
-      tctx.fillRect(0, 0, width, height);
-    }
-
-    if (materialType === "stone") {
-      //Overlay image if one is present
-      if (overlayImage && overlayImage.complete) {
-        tctx.globalCompositeOperation = "overlay";
-        tctx.drawImage(overlayImage, 0, 0, width, height);
-      } else if (color && (color.startsWith('#') || color.startsWith('rgb'))) {
-
-        // Color the stone (respecting the PNG’s shading)
-        tctx.globalCompositeOperation = "overlay"; // paint only where pixels exist
-        tctx.fillStyle = color;                        // e.g. "#868686"
-        tctx.fillRect(0, 0, width, height);
+    // Check if image has loaded properly
+      if (!img.complete || img.naturalWidth === 0) {
+          console.error("Image not loaded:", img.src);
+          return; // Skip drawing broken image
       }
-      // If color is invalid and there is no overlay image, just use original stone
+      
+      const tempCanvas = document.createElement("canvas");
+        tempCanvas.width = width;
+        tempCanvas.height = height;
+        const tctx = tempCanvas.getContext("2d");
+        
+        // Draw original image
+        tctx.drawImage(img, 0, 0, width, height);
+        
+        // Apply color
+        if (materialType === "metal") {
+            // Color the metal (respecting the PNG’s shading)
+            tctx.globalCompositeOperation = "overlay"; // paint only where pixels exist
+            tctx.fillStyle = color;                        
+            tctx.fillRect(0, 0, width, height);
+        }
+        
+        if (materialType === "stone") {
+            //Overlay image if one is present
+            if (overlayImage && overlayImage.complete && overlayImage.naturalWidth > 0) {
+                tctx.globalCompositeOperation = "overlay";
+                tctx.drawImage(overlayImage, 0, 0, width, height);
+            } else if (color && (color.startsWith('#') || color.startsWith('rgb'))) {
+                
+                // Color the stone (respecting the PNG’s shading)
+                tctx.globalCompositeOperation = "overlay"; // paint only where pixels exist
+                tctx.fillStyle = color;                     
+                tctx.fillRect(0, 0, width, height);
+            }
+            // If color is invalid and there is no overlay image, just use original stone
+        }
+        
+        // CRITICAL: Restore original alpha mask
+        tctx.globalCompositeOperation = "destination-in";
+        tctx.drawImage(img, 0, 0, width, height);
+        
+        // Draw final result to main canvas
+        ctx.drawImage(tempCanvas, x, y);
     }
-
-    // CRITICAL: Restore original alpha mask
-    tctx.globalCompositeOperation = "destination-in";
-    tctx.drawImage(img, 0, 0, width, height);
-
-    // Draw final result to main canvas
-    ctx.drawImage(tempCanvas, x, y);
-  }
 
 
   // ===== STATE =====
@@ -1024,10 +1072,16 @@
     if (colorInfo && colorInfo.image) {
       const overlayImg = new Image();
       overlayImg.src = colorInfo.image;
-      stone.overlayImage = overlayImg;
+        overlayImg.onload = () => renderAvatar();
+        overlayImg.onerror = () => {
+            console.error("Failed to overlay image:", colorInfo.image);
+            stone.overlayImage = null;
+            renderAvatar();
+        };
+        stone.overlayImage = overlayImg;
     }
-
-    img.onload = () => {
+      
+      img.onload = () => {
       stone.scale = normalizeScale(img, 1);
 
       // Stone shape/radious is elipse not square image box
@@ -1039,11 +1093,14 @@
 
       // Base size for proportional scaleing of other eliments
       stone.visualHeight = img.naturalHeight * stone.scale;
-
       renderAvatar();
     };
 
-    return stone;
+      img.onerror = () => {
+          console.error("Failed to load stone image:", src);
+      };
+      
+      return stone;
   }
 
   function addStone(src) {
