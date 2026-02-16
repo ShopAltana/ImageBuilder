@@ -1354,11 +1354,18 @@
 
         // BAND SELECTION HIGHLIGHT
         if (selectedObjects.includes(band)) {
-          ctx.fillStyle = "#da9d9440";
-          const x = -band.img.naturalWidth / 2;
-          const y = -band.img.naturalHeight / 2;
-          roundRect(ctx, x, y, band.img.naturalWidth, band.img.naturalHeight, 70);
-          ctx.fill();
+            const highlightCanvas = document.createElement("canvas");
+            highlightCanvas.width = band.img.naturalWidth;
+            highlightCanvas.height = band.img.naturalHeight;
+            const hctx = highlightCanvas.getContext("2d");
+
+            hctx.drawImage(band.img, 0, 0);
+
+            hctx.globalCompositeOperation = "source-atop";
+            hctx.fillStyle = "#da9d9440";
+            hctx.fillRect(0, 0, highlightCanvas.width, highlightCanvas.height);
+
+            ctx.drawImage(highlightCanvas, -band.img.naturalWidth / 2, -band.img.naturalHeight / 2);
         }
         ctx.restore();
       });
@@ -1377,12 +1384,20 @@
         const y = -stone.img.naturalHeight / 2;
         applyColorTint(ctx, stone.img, x, y, stone.img.naturalWidth, stone.img.naturalHeight, stone.color, "stone", stone.overlayImage);
 
-        // STONE SELECTION HIGHLIGHT
+        // STONE SELECTION HIGHLIGHT (source-atop)
         if (selectedObjects.includes(stone)) {
-          ctx.fillStyle = "#da9d9440";
-          ctx.beginPath();
-          ctx.ellipse(0, 0, stone.img.naturalWidth / 2, stone.img.naturalHeight / 2, 0, 0, Math.PI * 2);
-          ctx.fill();
+            const highlightCanvas = document.createElement("canvas");
+            highlightCanvas.width = stone.img.naturalWidth;
+            highlightCanvas.height = stone.img.naturalHeight;
+            const hctx = highlightCanvas.getContext("2d");
+
+            hctx.drawImage(stone.img, 0, 0);
+
+            hctx.globalCompositeOperation = "source-atop"; // ignores "empty" pixel space
+            hctx.fillStyle = "#da9d9440"; // highlight color
+            hctx.fillRect(0, 0, highlightCanvas.width, highlightCanvas.height);
+
+            ctx.drawImage(highlightCanvas, -stone.img.naturalWidth / 2, -stone.img.naturalHeight / 2);
         }
 
         ctx.restore();
@@ -1404,12 +1419,19 @@
 
         // PRONG SELECTION HIGHLIGHT
         if (selectedObjects.includes(prong)) {
-          ctx.fillStyle = "#da9d9440";
-          ctx.beginPath();
-          ctx.arc(0, 0, Math.max(prong.img.naturalWidth, prong.img.naturalHeight) / 2, 0, Math.PI * 2);
-          ctx.fill();
-        }
+            const highlightCanvas = document.createElement("canvas");
+            highlightCanvas.width = prong.img.naturalWidth;
+            highlightCanvas.height = prong.img.naturalHeight;
+            const hctx = highlightCanvas.getContext("2d");
 
+            hctx.drawImage(prong.img, 0, 0);
+
+            hctx.globalCompositeOperation = "source-atop";
+            hctx.fillStyle = "#da9d9440";
+            hctx.fillRect(0, 0, highlightCanvas.width, highlightCanvas.height);
+
+            ctx.drawImage(highlightCanvas, -prong.img.naturalWidth / 2, -prong.img.naturalHeight / 2);
+        }
         ctx.restore();
       });
 
