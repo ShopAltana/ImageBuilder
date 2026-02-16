@@ -1031,20 +1031,55 @@
 
     // ===== IMAGE METADATA =====
     const imageMetadata = {
-      // Bands: Size format [width_mm, height_mm]
-      'S1W16H16Band.png': { type: 'band', width: 1.6, height: 1.6, ringSize: 1 },
-      'S1W16H17Band.png': { type: 'band', width: 1.6, height: 1.7, ringSize: 1 },
-      'S1W16H18Band.png': { type: 'band', width: 1.6, height: 1.8, ringSize: 1 },
+        // Bands: Size format [width_mm, height_mm]
+        'S1W16H16Band.png': { type: 'band', width: 1.6, height: 1.6, ringSize: 1 },
+        'S1W16H17Band.png': { type: 'band', width: 1.6, height: 1.7, ringSize: 1 },
+        'S1W16H18Band.png': { type: 'band', width: 1.6, height: 1.8, ringSize: 1 },
+        
+        'S14W16H16Band.png': { type: 'band', width: 1.6, height: 1.8, ringSize: 14 },
+        
+        // Stones: Size format [length_mm, width_mm, shape]
+        '0_75mmRound.png': { type: 'stone', shape: 'Round', diameter: 0.75 },
+        '0_80mmRound.png': { type: 'stone', shape: 'Round', diameter: 0.8 },
+        '0_85mmRound.png': { type: 'stone', shape: 'Round', diameter: 0.85 },
+        '0_90mmRound.png': { type: 'stone', shape: 'Round', diameter: 0.9 },
+        '0_95mmRound.png': { type: 'stone', shape: 'Round', diameter: 0.95 },
+        '1mmRound.png': { type: 'stone', shape: 'Round', diameter: 1 },
+        '1_5mmRound.png': { type: 'stone', shape: 'Round', diameter: 1.5 },
+        '2mmRound.png': { type: 'stone', shape: 'Round', diameter: 2 },
+        '2_5mmRound.png': { type: 'stone', shape: 'Round', diameter: 2.5 },
+        '3mmRound.png': { type: 'stone', shape: 'Round', diameter: 3 },
+        '3_5mmRound.png': { type: 'stone', shape: 'Round', diameter: 3.5 },
+        '4mmRound.png': { type: 'stone', shape: 'Round', diameter: 4 },
+        '4_5mmRound.png': { type: 'stone', shape: 'Round', diameter: 4.5 },
+        '5mmRound.png': { type: 'stone', shape: 'Round', diameter: 5 },
+        '5_5mmRound.png': { type: 'stone', shape: 'Round', diameter: 5.5 },
+        'Rd6mm.png': { type: 'stone', shape: 'Round', diameter: 6 },
+        '6_5mmRound.png': { type: 'stone', shape: 'Round', diameter: 6.5 },
+        '7mmRound.png': { type: 'stone', shape: 'Round', diameter: 7 },
+        '7_5mmRound.png': { type: 'stone', shape: 'Round', diameter: 7.5 },
+        '8mmRound.png': { type: 'stone', shape: 'Round', diameter: 8 },
+        '8_5mmRound.png': { type: 'stone', shape: 'Round', diameter: 8.5 },
+        '9mmRound.png': { type: 'stone', shape: 'Round', diameter: 9 },
 
-      'S14W16H16Band.png': { type: 'band', width: 1.6, height: 1.8, ringSize: 14 },
+        'Ov5x4mm.png': { type: 'stone', shape: 'Oval', length: 5, width: 4 },
+        '6x4mmOv.png': { type: 'stone', shape: 'Oval', length: 6, width: 4 },
+        'Ov7x5mm.png': { type: 'stone', shape: 'Oval', length: 7, width: 5 },
+        '8x5_8mmOv.png': { type: 'stone', shape: 'Oval', length: 8, width: 5.8 },
 
-      // Stones: Size format [length_mm, width_mm, shape]
-      'Ov7x5mm.png': { type: 'stone', shape: 'Oval', length: 7, width: 5 },
-      'Ov5x4mm.png': { type: 'stone', shape: 'Oval', length: 5, width: 4 },
-      'Rd6mm.png': { type: 'stone', shape: 'Round', diameter: 6 },
+        '6x3_5mmMrqu.png': { type: 'stone', shape: 'Marquise', length: 6, width: 3.5 },
+        '8_3x4_4mmMrqu.png': { type: 'stone', shape: 'Marquise', length: 8.3, width: 4.4 },
+        '10x5_4mmMrqu.png': { type: 'stone', shape: 'Marquise', length: 10, width: 5.4 },
 
-      // Prongs
-      'RoundProng.png': { type: 'prong', shape: 'Round' }
+        '3_75mmSqur.png': { type: 'stone', shape: 'Princess', length: 3.75, width: 3.75 },
+        '4mmSqur.png': { type: 'stone', shape: 'Princess', length: 4, width: 4 },
+        '4_3mmSqur.png': { type: 'stone', shape: 'Princess', length: 4.3, width: 4.3 },
+        '4_5mmSqur.png': { type: 'stone', shape: 'Princess', length: 4.5, width: 4.5 },
+
+        '4_5x3mmEm.png': { type: 'stone', shape: 'Emerald', length: 4.5, width: 3 },
+        
+        // Prongs
+        'RoundProng.png': { type: 'prong', shape: 'Round' }
     };
 
     // Helper function to get metadata from image source
