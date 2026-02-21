@@ -1371,7 +1371,7 @@
             hctx.drawImage(band.img, 0, 0);
 
             // Apply highlight on top of swatch colored image (purly for asthetics)
-            hctx.globalCompositeOperation = "source-atop";
+            hctx.globalCompositeOperation = "source-in";
             hctx.fillStyle = "#da9d9440";
             hctx.fillRect(0, 0, highlightCanvas.width, highlightCanvas.height);
 
@@ -1394,7 +1394,7 @@
         const y = -stone.img.naturalHeight / 2;
         applyColorTint(ctx, stone.img, x, y, stone.img.naturalWidth, stone.img.naturalHeight, stone.color, "stone", stone.overlayImage);
 
-        // STONE SELECTION HIGHLIGHT (source-atop)
+        // STONE SELECTION HIGHLIGHT (source-in)
         if (selectedObjects.includes(stone)) {
             const highlightCanvas = document.createElement("canvas");
             highlightCanvas.width = stone.img.naturalWidth;
@@ -1417,8 +1417,8 @@
             hctx.globalCompositeOperation = "destination-in";
             hctx.drawImage(stone.img, 0, 0);
 
-            // source-atop highlight
-            hctx.globalCompositeOperation = "source-atop"; // ignores "empty" pixel space
+            // source-in highlight
+            hctx.globalCompositeOperation = "source-in"; // ignores "empty" pixel space
             hctx.fillStyle = "#da9d9440"; // highlight color
             hctx.fillRect(0, 0, highlightCanvas.width, highlightCanvas.height);
 
@@ -1458,7 +1458,7 @@
             hctx.globalCompositeOperation = "destination-in";
             hctx.drawImage(prong.img, 0, 0);
 
-            hctx.globalCompositeOperation = "source-atop";
+            hctx.globalCompositeOperation = "source-in";
             hctx.fillStyle = "#da9d9440";
             hctx.fillRect(0, 0, highlightCanvas.width, highlightCanvas.height);
 
