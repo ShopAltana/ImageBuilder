@@ -60,8 +60,8 @@
             border:5px solid #da9d94;
             border-radius: 10px;
             justify-content: center; /* Centers horizontally */
-            align-items: flex-start;     /* Centers vertically */
-            height: 600px;           /* Ensures the container takes the full viewport height */
+            align-items: flex-start; /* Centers vertically */
+            height: 600px; /* Ensures the container takes the full viewport height */
             width: 300px;
 
             display: flex;
@@ -74,8 +74,8 @@
           border:5px solid #da9d94;
           border-radius: 15px;
           justify-content: center; /* Centers horizontally */
-          align-items: center;     /* Centers vertically */
-          height: 600px;           /* Ensures the container takes the full viewport height */
+          align-items: center; /* Centers vertically */
+          height: 600px; /* Ensures the container takes the full viewport height */
           width: 600px;
         }
 
@@ -237,26 +237,28 @@
     <div class="app">
         <a href="https://shopaltana.github.io/ImageArchive/ImageArchive.html" class="nav-link">← Image Archive</a>
     </div>
-
-  <div class="app">
-    <div class="instruction">
-      <h1> Instructions </h1>
-      <h2> • Highlight stone before adding prongs, prongs will bind to selected stone </h2>
-      <h2> • Left click to select/highlight objects </h2>
-      <h2> • Hold 'Shift' to select multiple objects </h2>
-      <h2> • Left click already selected object while holding 'Shift' to remove it from selection group </h2>
-      <h2> • Click and drag to move objects </h2>
-      <h2> • Prongs automatically move with their bound stone </h2>
-      <h2> • Press 'b' to unbind selected prongs from their parent stone </h2>
-      <h2> • Press 'b' to bind selected prongs to a new selected parent stone </h2>
-      <h2> • Left & Right Arrowkeys to rotate highlighted object</h2>
-      <h2> • Up & Down Arrowkeys to move highlighted object's layer </h2>
-      <h2> • Backspace to delete highlighted object </h2>
-      <h2> • + & - to scale highlighted prong size </h2>
-      <h2> • Cmd C to copy highlighted objects </h2>
-      <h2> • Cmd V to paste copied objects </h2>
-      <h2> • Press 'x' to center highlighted objects </h2>
-    </div>
+    
+    <div class="app">
+        <div class="instruction">
+            <h1> Instructions </h1>
+            <h2> • Highlight stone before adding prongs, prongs will bind to selected stone </h2>
+            <h2> • Left click to select/highlight objects </h2>
+            <h2> • Hold 'Shift' to select multiple objects </h2>
+            <h2> • Left click already selected object while holding 'Shift' to remove it from selection group </h2>
+            <h2> • Click and drag to move objects </h2>
+            <h2> • Press 'c' to assign selected stone(s) "Center Stone" </h2>
+            <h2> • Press 'a' to assign selected stone(s) "Accent Stone" </h2>
+            <h2> • Prongs automatically move with their bound stone </h2>
+            <h2> • Press 'b' to unbind selected prongs from their parent stone </h2>
+            <h2> • Press 'b' to bind selected prongs to a new selected parent stone </h2>
+            <h2> • Left & Right Arrowkeys to rotate highlighted object</h2>
+            <h2> • Up & Down Arrowkeys to move highlighted object's layer </h2>
+            <h2> • Backspace to delete highlighted object </h2>
+            <h2> • + & - to scale highlighted prong size </h2>
+            <h2> • Cmd C to copy highlighted objects </h2>
+            <h2> • Cmd V to paste copied objects </h2>
+            <h2> • Press 'x' to center highlighted objects </h2>
+        </div>
 
     <div class="sidebar"> <!-- creating an expandable/colapsable sidebar menu -->
       <div class="expandable-menu">
@@ -2047,16 +2049,24 @@
     });
     
     // ===== SAVE AS PDF =====
-    function formatStatsForPDF(lines) { // Format PDF save
+    function formatStatsForPDF(lines) { // format PDF save
         const sectionTitles = ['Band:', 'Bands:', 'Center Stone:', 'Center Stone(s):', 'Accent Stone:', 'Accent Stone(s):', 'Stone:', 'Stone(s):', 'Unattached Prongs'];
+        let insideProngBlock = false;
         
         return lines.map(line => {
             const trimmed = line.trim();
             const indent = line.search(/\S/);
             const isSectionTitle = sectionTitles.some(title => trimmed.startsWith(title));
+            const isProngHeader = trimmed.startsWith('Prongs:');
+            const isStoneOrBandLine = isSectionTitle || /^(Round|Oval|Marquise|Princess|Emerald|Size)/.test(trimmed);
+            
+            if (isStoneOrBandLine) insideProngBlock = false;
+            if (isProngHeader) insideProngBlock = true;
             
             if (isSectionTitle) {
                 return `<span class="stat-section-title">${trimmed}</span>`;
+            } else if (insideProngBlock) {
+                return `<span class="stat-prong">${trimmed}</span>`;
             } else if (indent > 10) {
                 return `<span class="stat-sub">${trimmed}</span>`;
             } else {
@@ -2098,6 +2108,7 @@
                 .stat-section-title { font-weight: bold; margin-top: 12px; display: block; }
                 .stat-line { display: block; }
                 .stat-sub { display: block; color: #c7525d; padding-left: 15px; }
+                .stat-prong { display: block; padding-left: 30px; color: #c7525d; }
             </style>
         </head>
         <body>
@@ -2179,26 +2190,34 @@
         // Stats lines
         const sectionTitles = ['Band:', 'Bands:', 'Center Stone:', 'Center Stone(s):', 'Accent Stone:', 'Accent Stone(s):', 'Stone:', 'Stone(s):', 'Unattached Prongs'];
         
+        let insideProngBlock = false;
+        
         statsLines.forEach(line => {
             const trimmed = line.trim();
             const indent = line.search(/\S/);
             const isSectionTitle = sectionTitles.some(title => trimmed.startsWith(title));
+            const isProngHeader = trimmed.startsWith('Prongs:');
+            const isStoneOrBandLine = isSectionTitle || /^(Round|Oval|Marquise|Princess|Emerald|Size)/.test(trimmed); // UPDATE NEEDED WHEN MORE STONES ADDED
             
-            // Add space above section titles
+            if (isProngHeader) insideProngBlock = true;
+            if (isSectionTitle || isStoneOrBandLine) insideProngBlock = false;
+            if (isProngHeader) insideProngBlock = true; // re-set after the reset above
+            
+            const extraIndent = (insideProngBlock) ? 20 : 0;
+            
             if (isSectionTitle) {
                 textY += lineHeight * 0.6; // extra gap before title
-            }
-            
-            // Font: bold only for section titles, normal for everything else
-            if (isSectionTitle) {
                 ectx.font = `bold ${fontSize}px Trebuchet, sans-serif`;
-                ectx.fillStyle = '#555555'; // title text color
+                ectx.fillStyle = '#c7525d'; // title text color
+            } else if (indent > 10 || insideProngBlock) {
+                ectx.font = `${fontSize}px Trebuchet, sans-serif`;
+                ectx.fillStyle = '#555555'; // indent text color
             } else {
                 ectx.font = `${fontSize}px Trebuchet, sans-serif`;
-                ectx.fillStyle = indent > 10 ? '#c7525d' : '#555555'; // reg text color
+                ectx.fillStyle = '#555555'; // reg text color
             }
             
-            ectx.fillText(trimmed, textX + Math.min(indent * 2, 30), textY);
+            ectx.fillText(trimmed, textX + Math.min(indent * 2, 30) + extraIndent, textY);
             textY += lineHeight;
         });
         
