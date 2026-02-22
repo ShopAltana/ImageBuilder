@@ -65,7 +65,7 @@
             width: 300px;
 
             display: flex;
-            gap: 0px
+            gap: 0px;
           }
 
         .canvas-container { /* The place where you build the ring */
@@ -193,8 +193,9 @@
         }
 
       .menu-options {
-        display: none; /* Hide the options by default */
-        /* Add styling for layout (e.g., vertical stacking with 'display: block') */
+          display: none; /* Hide the options by default */
+          margin-left: 10px; /* Indent nested menus */
+          cursor: pointer;
       }
 
       .menu-options button {
@@ -219,20 +220,12 @@
         border-radius: 10px;
       }
 
-      .menu-options { /* Indent nested menus */
-        margin-left: 10px;
-      }
-
       /* show/hide the menu */
       .menu-options.show {
         display: block;
       }
 
       .expand-btn {
-        cursor: pointer;
-      }
-
-      .menu-options {
         cursor: pointer;
       }
 
@@ -550,7 +543,7 @@
       { color: 'whiteOpal', name: 'White', image: 'RingBuilderImages/ImageSwatches/whiteOpal.png' },
       { color: 'blackOpal', name: 'Black', image: 'RingBuilderImages/ImageSwatches/blackOpal.png' },
       { color: 'EthOpal', name: 'Ethiopian', image: 'RingBuilderImages/ImageSwatches/ethOpal.png' },
-      { color: '#F75A00', name: 'Mexcian Fire' }
+      { color: '#F75A00', name: 'Mexican Fire' }
     ],
     'Peridot': [
       { color: '#ACEB75', name: '' }
@@ -672,12 +665,13 @@
               swatch.classList.add("active");
           }
       });
-
-    // Update all selected stones together
-    const selectedStonesList = selectedObjects.filter(o => stones.includes(o));
-    if (selectedStonesList.length > 0) {
-      selectedStonesList.forEach(stone => {
-        stone.color = color;
+      
+      // Update all selected stones together
+      const selectedStonesList = selectedObjects.filter(o => stones.includes(o));
+      if (selectedStonesList.length > 0) {
+          selectedStonesList.forEach(stone => {
+              stone.stoneType = currentStoneType; 
+              stone.color = color;
 
         // Load overlay image if this color uses one
         if (colorInfo && colorInfo.image) {
@@ -698,65 +692,72 @@
 
     renderAvatar();
   }
-
-
-  function updateStoneColorSwatches(stoneType) {
-    const palette = stoneColorPalettes[stoneType] || stoneColorPalettes['Diamond'];
-    const swatchContainer = document.getElementById('stoneColorSwatches');
-
-    if (!swatchContainer) return;
-
-    // Clear existing swatches
-    swatchContainer.innerHTML = '';
-
-    // Add new swatches
-    palette.forEach((colorObj, index) => {
-      const swatch = document.createElement('div');
-      swatch.className = 'color-swatch';
-      if (index === 0) swatch.classList.add('active');
-
-      if (colorObj.image) {
-        swatch.style.backgroundImage = `url('${colorObj.image}')`;
-        swatch.style.backgroundSize = 'cover';
-        swatch.style.backgroundPosition = 'center';
-      } else {
-        swatch.style.backgroundColor = colorObj.color;
-      }
+    
+    
+    function updateStoneColorSwatches(stoneType, selectedColor = null) {
+        const palette = stoneColorPalettes[stoneType] || stoneColorPalettes['Diamond'];
+        const swatchContainer = document.getElementById('stoneColorSwatches');
         
-        swatch.title = colorObj.name;
-        swatch.dataset.color = colorObj.color;
-        swatch.onclick = () => setStoneColor(colorObj.color);
-        swatchContainer.appendChild(swatch);
-    });
-
-    // Set the first color as current and update selected stone when switched
-      if (palette.length > 0) {
-          currentStoneColor = palette[0].color;
-
-          const selectedStonesList = selectedObjects.filter(o => stones.includes(o));
-          if (selectedStonesList.length > 0) {
-              selectedStonesList.forEach(stone => {
-                  stone.color = palette[0].color;
-
-                  // Load overlay if swatch uses one
-                  if (palette[0].image) {
+        if (!swatchContainer) return;
+        
+        // Clear existing swatches
+        swatchContainer.innerHTML = '';
+        
+        // Decide what color should be "active"
+        const desiredColor = (selectedColor ?? (palette[0]?.color ?? '')).toLowerCase();
+        
+        // Add new swatches
+        palette.forEach((colorObj) => {
+            const swatch = document.createElement('div');
+            swatch.className = 'color-swatch';
+            
+            if (colorObj.image) {
+                swatch.style.backgroundImage = `url('${colorObj.image}')`;
+                swatch.style.backgroundSize = 'cover';
+                swatch.style.backgroundPosition = 'center';
+            } else {
+                swatch.style.backgroundColor = colorObj.color;
+            }
+            
+            swatch.title = colorObj.name;
+            swatch.dataset.color = colorObj.color; 
+            if ((colorObj.color || '').toLowerCase() === desiredColor) { // Set active immediately based on selectedColor
+                swatch.classList.add('active');
+            }
+            swatch.onclick = () => setStoneColor(colorObj.color);
+            swatchContainer.appendChild(swatch);
+        });
+        
+        // Set the first color as current and update selected stone when switched
+        if (palette.length > 0) {
+            currentStoneColor = (selectedColor ?? palette[0].color);
+            
+            // If stones are selected, apply that color + overlay immediately
+            const selectedStonesList = selectedObjects.filter(o => stones.includes(o));
+            if (selectedStonesList.length > 0) {
+                const colorInfo = palette.find(c => (c.color || '').toLowerCase() === currentStoneColor.toLowerCase());
+                selectedStonesList.forEach(stone => {
+                    stone.color = currentStoneColor;
+                    
+                    // Load overlay if swatch uses one
+                    if (colorInfo && colorInfo.image) {
                       const overlayImg = new Image();
-                      overlayImg.src = palette[0].image;
+                      overlayImg.src = colorInfo.image;
                       overlayImg.onload = () => renderAvatar();
                       overlayImg.onerror = () => {
-                          console.error("Failed to load overlay:", palette[0].image);
+                          console.error("Failed to load overlay:", colorInfo.image);
                           stone.overlayImage = null;
                           renderAvatar();
                       };
-                      stone.overlayImage = overlayImg;
-                  } else {
-                      stone.overlayImage = null;
-                  }
-              });
-              renderAvatar();
-          }
-      }
-  }
+                        stone.overlayImage = overlayImg;
+                    } else {
+                        stone.overlayImage = null;
+                    }
+                });
+                renderAvatar();
+            }
+        }
+    }
 
 
   function setProngColor(color) {
@@ -826,19 +827,6 @@
             swatchContainer.appendChild(swatch);
         });
     }
-    
-  // Helper to convert RGB to Hex
-  function rgbToHex(color) {
-    if (color.startsWith('#')) return color.toUpperCase();
-
-    const rgb = color.match(/\d+/g);
-    if (!rgb) return color;
-
-    return '#' + rgb.map(x => {
-      const hex = parseInt(x).toString(16);
-      return hex.length === 1 ? '0' + hex : hex;
-    }).join('').toUpperCase();
-  }
 
   // Listen to dropdown changes
   document.addEventListener('DOMContentLoaded', () => {
@@ -866,9 +854,12 @@
 
     document.getElementById('stoneType')?.addEventListener('change', (e) => {
       currentStoneType = e.target.value;
-
-      // Update color swatches when stone type changes
-      updateStoneColorSwatches(currentStoneType);
+        
+        // Update color swatches when stone type changes
+        // First swatch is active when switching types
+        const palette = stoneColorPalettes[currentStoneType] || stoneColorPalettes['Diamond'];
+        const firstColor = palette[0]?.color;
+        updateStoneColorSwatches(currentStoneType, firstColor);
 
       // Update all selected stones
       const selectedStonesList = selectedObjects.filter(o => stones.includes(o));
@@ -925,7 +916,7 @@
     });
 
       updateBandColorSwatches();
-      updateStoneColorSwatches('Diamond');
+      updateStoneColorSwatches('Diamond', currentStoneColor);
       updateProngColorSwatches();
   });
     // Apply color tint to image (preserves transparency)
@@ -985,7 +976,6 @@
   let selectedObjects = []; // for multi selection of any element
   let selectedStone = null; // singular selected stone for prong attachment
   let activeObject = null; // for dragging
-  let selectedObject = null; // persistent selection
 
   let multiSelectMode = false; // toggled by 'Shift'
 
@@ -1001,10 +991,6 @@
     return 0.3; // Scale to fit canvas 
   }
 
-  function normalizeBandScale(img) {
-    return 0.3; // Scale to fit canvas
-  }
-
   function updateAttachedProngs(stone) {
     prongs.forEach(prong => {
       if (prong.parentStone === stone) {
@@ -1016,6 +1002,19 @@
       }
     });
   }
+    
+    function syncStoneUIToStone(stone) {
+        if (!stone) return;
+        
+        currentStoneType = stone.stoneType;
+        currentStoneColor = stone.color;
+        
+        const dd = document.getElementById('stoneType');
+        if (dd) dd.value = currentStoneType;
+        
+        // Build swatches with correct active selection immediately
+        updateStoneColorSwatches(currentStoneType, currentStoneColor);
+    }
 
   function hitTestStone(x, y, stone) {
     // Transform click point into object's local space (accounting for rotation)
@@ -1065,20 +1064,6 @@
     const ry = band.radiusY * (band.hitShrink || 1);
     return (localX * localX) / (rx * rx) + (localY * localY) / (ry * ry) <= 1;
   }
-
-    function roundRect(ctx, x, y, width, height, radius) {
-      ctx.beginPath();
-      ctx.moveTo(x + radius, y);
-      ctx.lineTo(x + width - radius, y);
-      ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
-      ctx.lineTo(x + width, y + height - radius);
-      ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
-      ctx.lineTo(x + radius, y + height);
-      ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
-      ctx.lineTo(x, y + radius);
-      ctx.quadraticCurveTo(x, y, x + radius, y);
-      ctx.closePath();
-    }
 
     // ===== IMAGE METADATA =====
     const imageMetadata = {
@@ -1160,7 +1145,7 @@
     };
 
     img.onload = () => {
-      band.scale = normalizeBandScale(img);
+      band.scale = normalizeScale(img);
       band.radiusX = (img.naturalWidth * band.scale) / 2;
       band.radiusY = (img.naturalHeight * band.scale) / 2;
       band.hitShrink = 1;
@@ -1274,7 +1259,7 @@
         if (metadata) {
           // Get color name from the palette
           const palette = stoneColorPalettes[stone.stoneType] || stoneColorPalettes['Diamond'];
-          const colorInfo = palette.find(c => c.color.toUpperCase() === stone.color.toUpperCase());
+          const colorInfo = palette.find(c => (c.color || '').toLowerCase() === (stone.color || '').toLowerCase());
           const colorName = colorInfo ? colorInfo.name : 'Unknown';
 
           if (metadata.diameter) {
@@ -1347,9 +1332,8 @@
 
   // ===== PRONGS =====
   function addProng(src) {
-    if (!selectedStone) {
-      alert("Select a stone first!");
-      return;
+      const parent = selectedStone || null; // allows for valid unattached prongs
+      const baseZ = parent ? parent.zIndex + 1 : prongs.length;
     }
 
     const img = new Image();
@@ -1361,12 +1345,12 @@
 
       const prong = {
         img,
-        x: selectedStone.x, //position at stone center x
-        y: selectedStone.y, //position at stone center y
+        x: (parent ? parent.x : canvas.width / 2), //position at center x (of canvas or parent stone)
+        y: (parent ? parent.y : canvas.height / 2), //position at center y (of canvas or parent stone)
         scale: prongScale,
         rotation: 0, // defaut rotation 0 degrees
-        zIndex: selectedStone.zIndex + 1,
-        parentStone: selectedStone, // bind prong to selected stone
+        zIndex: baseZ,
+        parentStone: parent, // bind prong to selected stone if one is selected but allows for unattached prongs
         radius: 0, //prong polar coordinates at stone center
         angle: 0,
         color: currentProngColor,
@@ -1524,13 +1508,8 @@
   }
 
       // Multiple autimatic prongs
-
-      function getSelectedStone() {
-        return selectedStone;
-      }
-
       function addFourProngsAroundStone(prongSrc) {
-        const stone = getSelectedStone();
+        const stone = selectedStone;
         if (!stone) return;
 
         const rx = stone.radiusX;
@@ -1596,21 +1575,21 @@
     const rect = canvas.getBoundingClientRect();
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
-
-    // Check objects from top layer to bottom ( prongs > stone > band )
-    const hitList = [...prongs, ...stones, ...bands].sort((a,b) => b.zIndex - a.zIndex);
-
-    for (const obj of hitList) {
-      let hit = false;
-      if (prongs.includes(obj)) hit = hitTestProng(x,y,obj);
-      else if (stones.includes(obj)) hit = hitTestStone(x,y,obj);
-      else hit = hitTestBand(x,y,obj);
-
-      if (hit) {
-        activeObject = obj;
-        selectedObject = obj;
-        dragOffsetX = x - obj.x;
-        dragOffsetY = y - obj.y;
+      
+      
+      // Check objects from top layer to bottom ( prongs > stone > band )
+      const hitList = [...prongs, ...stones, ...bands].sort((a,b) => b.zIndex - a.zIndex);
+      
+      for (const obj of hitList) {
+          let hit = false;
+          if (prongs.includes(obj)) hit = hitTestProng(x,y,obj);
+          else if (stones.includes(obj)) hit = hitTestStone(x,y,obj);
+          else hit = hitTestBand(x,y,obj);
+          
+          if (hit) {
+              activeObject = obj;
+              dragOffsetX = x - obj.x;
+              dragOffsetY = y - obj.y;
 
         // Multi-select mode: toggle selection
         if (multiSelectMode) {
@@ -1627,26 +1606,25 @@
             selectedObjects = [obj];
           }
         }
-
-        // Stone selection for prong attachment
-        if (stones.includes(obj)) {
-          selectedStone = obj;
-        }
-
-        clickedObject = true;
-        break;
+          
+          // Stone selection for prong attachment
+          if (stones.includes(obj)) {
+              selectedStone = obj;
+              syncStoneUIToStone(obj);
+          }
+          
+          clickedObject = true;
+          break;
       }
     }
 
     if (!clickedObject) {
       selectedObjects = [];
       selectedStone = null;
-      selectedObject = null;
       activeObject = null;
     }
 
     renderAvatar();
-    updateStatsPanel();
   });
 
   canvas.addEventListener("mousemove", e => {
@@ -1836,29 +1814,48 @@
       });
 
       // Paste stones
-      const newStones = clipboard.stones.map(orig => {
-        const img = new Image();
-        img.src = orig.imgSrc;
-
-        const stone = {
-          img,
-          x: orig.x + 20,
-          y: orig.y + 20,
-          scale: orig.scale,
-          rotation: orig.rotation,
-          zIndex: stones.length,
-          radiusX: orig.radiusX,
-          radiusY: orig.radiusY,
-          visualHeight: orig.visualHeight,
-          hitShrink: orig.hitShrink,
-          color: orig.color,
-          stoneType: orig.stoneType
-
-        };
-
-        stones.push(stone);
-        return stone;
-      });
+        const newStones = clipboard.stones.map(orig => {
+            const img = new Image();
+            img.src = orig.imgSrc;
+            
+            const stone = {
+                img,
+                x: orig.x + 20,
+                y: orig.y + 20,
+                scale: orig.scale,
+                rotation: orig.rotation,
+                zIndex: stones.length,
+                radiusX: orig.radiusX,
+                radiusY: orig.radiusY,
+                visualHeight: orig.visualHeight,
+                hitShrink: orig.hitShrink,
+                color: orig.color,
+                stoneType: orig.stoneType,
+                overlayImage: null
+            };
+            
+            const palette = stoneColorPalettes[stone.stoneType] || stoneColorPalettes['Diamond'];
+            const colorInfo = palette.find(c =>
+                (c.color || '').toLowerCase() === (stone.color || '').toLowerCase()
+                                          );
+            
+            if (colorInfo && colorInfo.image) {
+                const overlayImg = new Image();
+                overlayImg.src = colorInfo.image;
+                overlayImg.onload = () => renderAvatar();
+                overlayImg.onerror = () => {
+                    console.error("Failed to load overlay:", colorInfo.image);
+                    stone.overlayImage = null;
+                    renderAvatar();
+                };
+                stone.overlayImage = overlayImg;
+            } else {
+                stone.overlayImage = null;
+            }
+            
+            stones.push(stone);
+            return stone;
+        });
 
       // Paste prongs
       const newProngs = clipboard.prongs.map(orig => {
@@ -1917,7 +1914,6 @@
       selectedObjects = [];
       selectedStone = null;
       activeObject = null;
-      selectedObject = null;
 
       renderAvatar();
       e.preventDefault();
@@ -2001,7 +1997,6 @@
 
     selectedObjects = [];
     activeObject = null;
-    selectedObject = null;
     renderAvatar();
     e.preventDefault(); // Prevent browser back navigation
   }
@@ -2024,13 +2019,10 @@
     );
 
     for (const stone of sortedStones) {
-      const dx = (x - stone.x) / stone.radiusX;
-      const dy = (y - stone.y) / stone.radiusY;
-
-      if (dx * dx + dy * dy <= 1) {
-        selectedStone = stone;
-        break;
-      }
+        if (hitTestStone(x, y, stone)) {
+            selectedStone = stone;
+            break;
+        }
     }
 
     renderAvatar();
