@@ -413,6 +413,12 @@
           </div>
           <div class="color-swatches" id="prongColorSwatches"></div>
         </div>
+          <!-- SAVE -->
+          <button class="expand-btn">Save</button>
+          <div class="menu-options">
+              <button onclick="saveAsPDF()" style="background-color: #c7525d; color: white; border-color: #a03040; margin-top: 10px;">Save as PDF</button>
+              <button onclick="saveAsPNG()" style="background-color: #c7525d; color: white; border-color: #a03040; margin-top: 5px;">Save as PNG</button>
+          </div>
       </div>
     </div>
 
@@ -1248,79 +1254,65 @@
 
       html += '</div>';
     }
-
-    // STONES SECTION
-    if (stones.length > 0) {
-      html += `<div class="stats-section"><strong>Stone${stones.length > 1 ? 's' : ''}:</strong><br>`;
-
-      stones.forEach((stone, index) => {
-        const metadata = getImageMetadata(stone.img.src);
-
-        if (metadata) {
-          // Get color name from the palette
-          const palette = stoneColorPalettes[stone.stoneType] || stoneColorPalettes['Diamond'];
-          const colorInfo = palette.find(c => (c.color || '').toLowerCase() === (stone.color || '').toLowerCase());
-          const colorName = colorInfo ? colorInfo.name : 'Unknown';
-
-          if (metadata.diameter) {
-            html += `<div class="stat-item">${metadata.shape} ${metadata.diameter}mm<br>`;
-          } else {
-            html += `<div class="stat-item">${metadata.shape} ${metadata.length} x ${metadata.width}mm<br>`;
-          }
-          html += `<span style="margin-left: 15px; color: #c7525d;">${colorName} ${stone.stoneType}</span></div>`;
-        }
-        // Prongs attached to this stone
-        const attachedProngs = prongs.filter(p => p.parentStone === stone);
-        if (attachedProngs.length > 0) {
-          html += `<div class="stat-item" style="margin-left: 15px;"><strong>Prongs:</strong></div>`;
-
-          // Group prongs by size and type
-          const prongGroups = {};
-          attachedProngs.forEach(p => {
-            const prongMetadata = getImageMetadata(p.img.src);
-            const sizeMM = (p.img.naturalWidth * p.scale * 0.0442).toFixed(2); //adjust prong size
-            const shape = prongMetadata ? prongMetadata.shape : 'Unknown';
-            const key = `${shape}-${sizeMM}-${p.metalType}`;
-
-            if (!prongGroups[key]) {
-              prongGroups[key] = { count: 0, shape, sizeMM, metalType: p.metalType };
-            }
-            prongGroups[key].count++;
+      
+      // STONES SECTION - divided by assigned role
+      const centerStones = stones.filter(s => s.role === "center");
+      const accentStones = stones.filter(s => s.role === "accent");
+      const unassignedStones = stones.filter(s => !s.role);
+      
+      function renderStoneGroup(groupStones, label) {
+          if (groupStones.length === 0) return '';
+          let html = `<div class="stats-section"><strong>${label}:</strong><br>`;
+          
+          groupStones.forEach(stone => {
+              const metadata = getImageMetadata(stone.img.src);
+              if (metadata) {
+                  const palette = stoneColorPalettes[stone.stoneType] || stoneColorPalettes['Diamond'];
+                  const colorInfo = palette.find(c => (c.color || '').toLowerCase() === (stone.color || '').toLowerCase());
+                  const colorName = colorInfo ? colorInfo.name : '';
+                  
+                  if (metadata.diameter) {
+                      html += `<div class="stat-item">${metadata.shape} ${metadata.diameter}mm<br>`;
+                  } else {
+                      html += `<div class="stat-item">${metadata.shape} ${metadata.length} x ${metadata.width}mm<br>`;
+                  }
+                  html += `<span style="margin-left: 15px; color: #c7525d;">${colorName} ${stone.stoneType}</span></div>`;
+              }
+              
+              const attachedProngs = prongs.filter(p => p.parentStone === stone);
+              if (attachedProngs.length > 0) {
+                  html += `<div class="stat-item" style="margin-left: 15px;"><strong>Prongs:</strong></div>`;
+                  const prongGroups = {};
+                  attachedProngs.forEach(p => {
+                      const prongMetadata = getImageMetadata(p.img.src);
+                      const sizeMM = (p.img.naturalWidth * p.scale * 0.0442).toFixed(2);
+                      const shape = prongMetadata ? prongMetadata.shape : 'Unknown';
+                      const key = `${shape}-${sizeMM}-${p.metalType}`;
+                      if (!prongGroups[key]) prongGroups[key] = { count: 0, shape, sizeMM, metalType: p.metalType };
+                      prongGroups[key].count++;
+                  });
+                  Object.values(prongGroups).forEach(group => {
+                      html += `<div class="stat-item" style="margin-left: 30px;">(${group.count}) ${group.shape} ${group.sizeMM}mm<br>`;
+                      html += `<span style="margin-left: 45px; color: #c7525d;">${group.metalType}</span></div>`;
+                  });
+              }
           });
-
-          Object.values(prongGroups).forEach(group => {
-            html += `<div class="stat-item" style="margin-left: 30px;">(${group.count}) ${group.shape} ${group.sizeMM}mm<br>`;
-              html += `<span style="margin-left: 45px; color: #c7525d;">${group.metalType}</span></div>`;
-          });
-        }
-      });
-
-      // Unattached prongs
-      const unattached = prongs.filter(p => !p.parentStone);
-      if (unattached.length > 0) {
-        html += `<div class="stat-item"><br><strong>Unattached Prongs: ${unattached.length}</strong></div>`;
-
-        const prongGroups = {};
-        unattached.forEach(p => {
-          const prongMetadata = getImageMetadata(p.img.src);
-          const sizeMM = (p.img.naturalWidth * p.scale * 0.0442).toFixed(2);
-          const shape = prongMetadata ? prongMetadata.shape : 'Unknown';
-          const key = `${shape}-${sizeMM}-${p.metalType}`;
-
-          if (!prongGroups[key]) {
-            prongGroups[key] = { count: 0, shape, sizeMM, metalType: p.metalType };
-          }
-          prongGroups[key].count++;
-        });
-
-        Object.values(prongGroups).forEach(group => {
-          html += `<div class="stat-item" style="margin-left: 15px;">(${group.count}) ${group.shape} ${group.sizeMM}mm<br>`;
-            html += `<span style="margin-left: 45px; color: #c7525d;">${group.metalType}</span></div>`;
-        });
+          
+          html += '</div>';
+          return html;
       }
-
-      html += '</div>';
-    }
+      
+      if (stones.length > 0) {
+          html += renderStoneGroup(centerStones, 'Center Stone(s)');
+          html += renderStoneGroup(accentStones, 'Accent Stone(s)');
+          html += renderStoneGroup(unassignedStones, 'Stone(s)');
+          
+          // Unattached prongs
+          const unattached = prongs.filter(p => !p.parentStone);
+          if (unattached.length > 0) {
+              html += `<div class="stats-section"><strong>Unattached Prongs: ${unattached.length}</strong></div>`;
+          }
+      }
 
     // Show message if nothing on canvas
     if (bands.length === 0 && stones.length === 0 && prongs.length === 0) {
@@ -1707,6 +1699,23 @@
         e.preventDefault();
       }
     }
+      // ===== ASSIGN STONE ROLE (press 'c' = center stone) =====
+      if (e.key.toLowerCase() === "c" && !isCmdOrCtrl) {
+          selectedObjects.filter(o => stones.includes(o)).forEach(stone => {
+              stone.role = stone.role === "center" ? null : "center"; // toggle
+          });
+          renderAvatar();
+          e.preventDefault();
+      }
+      
+      // ===== ASSIGN STONE ROLE (press 'a' = accent stone) =====
+      if (e.key.toLowerCase() === "a") {
+          selectedObjects.filter(o => stones.includes(o)).forEach(stone => {
+              stone.role = stone.role === "accent" ? null : "accent"; // toggle
+          });
+          renderAvatar();
+          e.preventDefault();
+      }
 
     // ===== COPY (Cmd/Ctrl + C) =====
     if (isCmdOrCtrl && e.key.toLowerCase() === "c") {
@@ -2026,16 +2035,150 @@
 
     renderAvatar();
   });
-
-  // ===== MENUS =====
-  document.querySelectorAll(".expand-btn").forEach(btn => {
-      const menu = btn.nextElementSibling;
-      if (!menu || !menu.classList.contains("menu-options")) return;
-      
-    btn.addEventListener("click", () => {
-        menu.classList.toggle("show");
+    
+    // ===== MENUS =====
+    document.querySelectorAll(".expand-btn").forEach(btn => {
+        const menu = btn.nextElementSibling;
+        if (!menu || !menu.classList.contains("menu-options")) return;
+        
+        btn.addEventListener("click", () => {
+            menu.classList.toggle("show");
+        });
     });
-  });
+    
+    // ===== SAVE AS PDF =====
+    function saveAsPDF() {
+        // Deselect everything so highlights don't appear in the snapshot
+        const prevSelected = [...selectedObjects];
+        selectedObjects = [];
+        renderAvatar();
+        
+        // Snapshot the canvas
+        const canvasDataURL = canvas.toDataURL("image/png");
+        
+        // Restore selection
+        selectedObjects = prevSelected;
+        renderAvatar();
+        
+        // Build stats text from the panel
+        const statsText = document.getElementById('statsContent').innerText;
+        
+        // Open a hidden iframe to print from
+        const printWindow = window.open('', '_blank');
+        printWindow.document.write(`
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <title>Ring Design</title>
+            <style>
+                body { font-family: Trebuchet, sans-serif; display: flex; gap: 30px; padding: 30px; color: #555; }
+                img { border: 3px solid #da9d94; border-radius: 10px; width: 400px; height: 400px; object-fit: contain; }
+                .stats { flex: 1; font-size: 13px; line-height: 1.8; }
+                h2 { color: #ffb9c0; margin-top: 0; }
+                hr { border: 1px solid #da9d94; }
+            </style>
+        </head>
+        <body>
+            <img src="${canvasDataURL}" />
+            <div class="stats">
+                <h2>Ring Details</h2>
+                <hr/>
+                <pre style="white-space: pre-wrap; font-family: inherit;">${statsText}</pre>
+            </div>
+        </body>
+        </html>
+        `);
+        printWindow.document.close();
+        printWindow.onload = () => {
+            printWindow.print(); // triggers browser Save as PDF dialog
+            printWindow.close();
+        };
+    }
+
+    // ===== SAVE AS PNG =====
+    function saveAsPNG() {
+        const prevSelected = [...selectedObjects];
+        selectedObjects = [];
+        renderAvatar();
+        
+        const statsText = document.getElementById('statsContent').innerText;
+        const statsLines = statsText.split('\n').filter(line => line.trim() !== '');
+        
+        // Layout settings
+        const padding = 20;
+        const fontSize = 13;
+        const lineHeight = 20;
+        const statsWidth = 220;
+        const totalHeight = Math.max(canvas.height, padding * 2 + statsLines.length * lineHeight + 60);
+        const totalWidth = canvas.width + statsWidth + padding * 3;
+        
+        // Create off-screen canvas to save from
+        const exportCanvas = document.createElement('canvas');
+        exportCanvas.width = totalWidth;
+        exportCanvas.height = totalHeight;
+        const ectx = exportCanvas.getContext('2d');
+        
+        // Background
+        ectx.fillStyle = '#ffefed';
+        ectx.fillRect(0, 0, totalWidth, totalHeight);
+        
+        // Draw ring canvas on the left
+        ectx.drawImage(canvas, 0, 0);
+        
+        // Divider line
+        ectx.strokeStyle = '#da9d94';
+        ectx.lineWidth = 2;
+        ectx.beginPath();
+        ectx.moveTo(canvas.width + padding, padding);
+        ectx.lineTo(canvas.width + padding, totalHeight - padding);
+        ectx.stroke();
+        
+        // Stats title
+        const textX = canvas.width + padding * 2;
+        let textY = padding + fontSize;
+        
+        ectx.font = `bold 16px Trebuchet, sans-serif`;
+        ectx.fillStyle = '#ffb9c0';
+        ectx.fillText('Ring Details', textX, textY);
+        textY += lineHeight + 4;
+        
+        // Divider under title
+        ectx.strokeStyle = '#da9d94';
+        ectx.lineWidth = 1;
+        ectx.beginPath();
+        ectx.moveTo(textX, textY);
+        ectx.lineTo(totalWidth - padding, textY);
+        ectx.stroke();
+        textY += lineHeight;
+        
+        // Stats lines
+        statsLines.forEach(line => {
+            const trimmed = line.trim();
+            const indent = line.search(/\S/); // detect indentation level from innerText
+            
+            ectx.font = trimmed.startsWith('(') || indent > 10
+                ? `12px Trebuchet, sans-serif` // sub-items
+                : trimmed === trimmed.toUpperCase() || indent === 0
+        ? `bold ${fontSize}px Trebuchet, sans-serif` // section headers
+        : `${fontSize}px Trebuchet, sans-serif`; // normal lines
+            
+            // Color sub-items (metal/stone type names) in pink
+            ectx.fillStyle = indent > 10 ? '#c7525d' : '#555555';
+            
+            ectx.fillText(trimmed, textX + Math.min(indent * 2, 30), textY);
+            textY += lineHeight;
+        });
+        
+        // Download
+        const link = document.createElement('a');
+        link.download = 'ring-design.png';
+        link.href = exportCanvas.toDataURL('image/png');
+        link.click();
+        
+        // Restore selection
+        selectedObjects = prevSelected;
+        renderAvatar();
+    }
 
 </script>
 </body>
