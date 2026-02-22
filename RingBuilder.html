@@ -60,7 +60,7 @@
             border:5px solid #da9d94;
             border-radius: 10px;
             justify-content: center; /* Centers horizontally */
-            align-items: top;     /* Centers vertically */
+            align-items: flex-start;     /* Centers vertically */
             height: 600px;           /* Ensures the container takes the full viewport height */
             width: 300px;
 
@@ -301,13 +301,7 @@
               <option value="Silver">Silver</option>
             </select>
           </div>
-          <div class="color-swatches">
-            <div class="color-swatch active" style="background-color: #FFD97A;" onclick="setBandColor('#FFD97A')" title="Yellow Gold"></div>
-            <div class="color-swatch" style="background-color: #E8E8E6;" onclick="setBandColor('#E8E8E6')" title="White Gold"></div>
-            <div class="color-swatch" style="background-color: #FFC299;" onclick="setBandColor('#FFC299')" title="Rose Gold"></div>
-            <div class="color-swatch" style="background-color: #F1F1F1;" onclick="setBandColor('#F1F1F1')" title="Platinum"></div>
-            <div class="color-swatch" style="background-color: #DFDFDF;" onclick="setBandColor('#DFDFDF')" title="Silver"></div>
-          </div>
+          <div class="color-swatches" id="bandColorSwatches"></div>
         </div>
 
         <!-- STONE MENU -->
@@ -379,9 +373,9 @@
               <option value="Garnet">Garnet</option>
               <option value="Aquamarine">Aquamarine</option>
               <option value="Alexandrite">Alexandrite</option>
-              <option value="Agate">Alexandrite</option>
+              <option value="Agate">Agate</option>
               <option value="Amethyst">Amethyst</option>
-              <option value="Amethyst">Ametrine</option>
+              <option value="Ametrine">Ametrine</option>
               <option value="Citrine">Citrine</option>
               <option value="Chrysoprase">Chrysoprase</option>
               <option value="Iolite">Iolite</option>
@@ -398,34 +392,7 @@
               <option value="Zircon">Zircon</option>
             </select>
           </div>
-          <div class="color-swatches">
-            <div class="color-swatch active" style="background-color: #FFFFFF;" onclick="setStoneColor('#FFFFFF')" title="Diamond/White"></div>
-            <div class="color-swatch" style="background-color: #0F52BA;" onclick="setStoneColor('#0F52BA')" title="Sapphire"></div>
-            <div class="color-swatch" style="background-color: #00733A;" onclick="setStoneColor('#00733A')" title="Emerald"></div>
-            <div class="color-swatch" style="background-color: #FFEBEB;" onclick="setStoneColor('#FFEBEB')" title="Morganite"></div>
-            <div class="color-swatch" style="background-color: #FFFFFF;" onclick="setStoneColor('#FFFFFF')" title="Moissanite"></div>
-            <div class="color-swatch" style="background-color: #E30B57;" onclick="setStoneColor('#E30B57')" title="Ruby"></div>
-            <div class="color-swatch" style="background-color: #6D0909;" onclick="setStoneColor('#6D0909')" title="Garnet"></div>
-            <div class="color-swatch" style="background-color: #B5F3FF;" onclick="setStoneColor('#B5F3FF')" title="Aquamarine"></div>
-            <div class="color-swatch" style="background-color: #0F4563;" onclick="setStoneColor('#0F4563')" title="Alexandrite"></div>
-            <div class="color-swatch" style="background-color: #F7F7F5;" onclick="setStoneColor('#F7F7F5')" title="Agate"></div>
-            <div class="color-swatch" style="background-color: #855CB5;" onclick="setStoneColor('#855CB5')" title="Amethyst"></div>
-            <div class="color-swatch" style="background-color: #855CB5;" onclick="setStoneColor('#855CB5')" title="Ametrine"></div>
-            <div class="color-swatch" style="background-color: #FCDB95;" onclick="setStoneColor('#FCDB95')" title="Citrine"></div>
-            <div class="color-swatch" style="background-color: #C4F5D1;" onclick="setStoneColor('#C4F5D1')" title="Chrysoprase"></div>
-            <div class="color-swatch" style="background-color: #2F304C;" onclick="setStoneColor('#2F304C')" title="Iolite"></div>
-            <div class="color-swatch" style="background-color: #DEADDD;" onclick="setStoneColor('#DEADDD')" title="Kunzite"></div>
-            <div class="color-swatch" style="background-color: #0E096B;" onclick="setStoneColor('#0E096B')" title="Lapis"></div>
-            <div class="color-swatch" style="background-color: #F5F8FF;" onclick="setStoneColor('#F5F8FF')" title="Moonstone"></div>
-            <div class="color-swatch" style="background-color: #171717;" onclick="setStoneColor('#171717')" title="Onyx"></div>
-            <div class="color-swatch" style="background-color: #F5F8FF;" onclick="setStoneColor('#F5F8FF')" title="Opal"></div>
-            <div class="color-swatch" style="background-color: #ACEB75;" onclick="setStoneColor('#ACEB75')" title="Peridot"></div>
-            <div class="color-swatch" style="background-color: #FF5CA2;" onclick="setStoneColor('#FF5CA2')" title="Spinel"></div>
-            <div class="color-swatch" style="background-color: #869EE3;" onclick="setStoneColor('#869EE3')" title="Tanzanite"></div>
-            <div class="color-swatch" style="background-color: #99EEFF;" onclick="setStoneColor('#99EEFF')" title="Topaz"></div>
-            <div class="color-swatch" style="background-color: #FF94BF;" onclick="setStoneColor('#FF94BF')" title="Tourmaline"></div>
-            <div class="color-swatch" style="background-color: #30BED9;" onclick="setStoneColor('#30BED9')" title="Zircon"></div>
-          </div>
+          <div class="color-swatches" id="stoneColorSwatches"></div>
         </div>
 
         <!-- PRONG MENU -->
@@ -451,13 +418,7 @@
               <option value="Silver">Silver</option>
             </select>
           </div>
-          <div class="color-swatches">
-            <div class="color-swatch active" style="background-color: #FFD97A;" onclick="setProngColor('#FFD97A')" title="Yellow Gold"></div>
-            <div class="color-swatch" style="background-color: #E8E8E6;" onclick="setProngColor('#E8E8E6')" title="White Gold"></div>
-            <div class="color-swatch" style="background-color: #FFC299;" onclick="setProngColor('#FFC299')" title="Rose Gold"></div>
-            <div class="color-swatch" style="background-color: #F1F1F1;" onclick="setProngColor('#F1F1F1')" title="Platinum"></div>
-            <div class="color-swatch" style="background-color: #DFDFDF;" onclick="setProngColor('#DFDFDF')" title="Silver"></div>
-          </div>
+          <div class="color-swatches" id="prongColorSwatches"></div>
         </div>
       </div>
     </div>
@@ -473,9 +434,6 @@
       </div>
     </div>
   </div>
-
-
-</body>
 
 <script>
   const canvas = document.getElementById("avatar");
@@ -592,7 +550,7 @@
       { color: 'whiteOpal', name: 'White', image: 'RingBuilderImages/ImageSwatches/whiteOpal.png' },
       { color: 'blackOpal', name: 'Black', image: 'RingBuilderImages/ImageSwatches/blackOpal.png' },
       { color: 'EthOpal', name: 'Ethiopian', image: 'RingBuilderImages/ImageSwatches/ethOpal.png' },
-      { color: '#F75A00', name: 'Mexian Fire' }
+      { color: '#F75A00', name: 'Mexcian Fire' }
     ],
     'Peridot': [
       { color: '#ACEB75', name: '' }
@@ -640,29 +598,58 @@
 
     currentBandMetal = metalMap[color] || 'Yellow Gold';
     document.getElementById('bandMetalType').value = currentBandMetal;
-
-    // Update active swatch
-    document.querySelectorAll('.color-swatches .color-swatch').forEach(swatch => {
-      if (swatch.onclick && swatch.onclick.toString().includes('setBandColor')) {
-        swatch.classList.remove('active');
-        if (swatch.style.backgroundColor === rgbToHex(color) ||
-            swatch.style.backgroundColor.toLowerCase() === color.toLowerCase()) {
-          swatch.classList.add('active');
-        }
+      
+      // Update active swatch (BAND ONLY)
+      const bandSwatches = document.querySelectorAll('#bandColorSwatches .color-swatch');
+      bandSwatches.forEach(swatch => {
+          swatch.classList.remove('active');
+          
+          const swatchHex = (swatch.dataset.color || "").toLowerCase();
+          if (swatchHex === color.toLowerCase()) swatch.classList.add("active");
+      });
+      
+      const selectedBands = selectedObjects.filter(o => bands.includes(o));
+      if (selectedBands.length > 0) {
+          selectedBands.forEach(b => {
+              b.color = color;
+              b.metalType = currentBandMetal;
+          });
+      } else {
+          currentBandColor = color;
       }
-    });
-
-    if (selectedObject && bands.includes(selectedObject)) {
-        selectedObject.color = color;
-        selectedObject.metalType = currentBandMetal;
-    } else {
-      currentBandColor = color;
-    }
-
-    renderAvatar();
-
+      
+      renderAvatar();
   }
-
+    function updateBandColorSwatches() {
+        const bandPalette = [
+            { color: '#FFD97A', name: 'Yellow Gold' },
+            { color: '#E8E8E6', name: 'White Gold' },
+            { color: '#FFC299', name: 'Rose Gold' },
+            { color: '#F1F1F1', name: 'Platinum' },
+            { color: '#DFDFDF', name: 'Silver' },
+        ];
+        
+        const swatchContainer = document.getElementById('bandColorSwatches');
+        if (!swatchContainer) return;
+        
+        swatchContainer.innerHTML = '';
+        
+        bandPalette.forEach((c) => {
+            const swatch = document.createElement('div');
+            swatch.className = 'color-swatch';
+            swatch.style.backgroundColor = c.color;
+            swatch.title = c.name;
+            swatch.dataset.color = c.color;
+            
+            if (c.color.toLowerCase() === currentBandColor.toLowerCase()) {
+                swatch.classList.add('active');
+            }
+            
+            swatch.onclick = () => setBandColor(c.color);
+            swatchContainer.appendChild(swatch);
+        });
+    }
+    
   function setStoneColor(color) {
     currentStoneColor = color;
 
@@ -672,18 +659,19 @@
     // Update active swatch
     const palette = stoneColorPalettes[currentStoneType] || stoneColorPalettes['Diamond'];
     const colorInfo = palette.find(c => c.color === color);
-
-    document.querySelectorAll('.color-swatches .color-swatch').forEach((swatch, index) => {
-      if (swatch.onclick && swatch.onclick.toString().includes('setStoneColor')) {
-        swatch.classList.remove('active');
-
-        // For image based swatches
-        const swatchColorObj = palette[index];
-        if (swatchColorObj && swatchColorObj.color === color) {
-          swatch.classList.add('active');
-        }
-      }
-    });
+      
+      // Update active swatch (STONE ONLY)
+      const stoneSwatches = document.querySelectorAll('#stoneColorSwatches .color-swatch');
+      stoneSwatches.forEach(swatch => swatch.classList.remove('active'));
+      
+      // Mark swatch as active
+      stoneSwatches.forEach(swatch => {
+          // If it's an image swatch, background color may be empty—so we store color in dataset
+          const swatchColor = swatch.dataset.color;
+          if ((swatchColor || "").toLowerCase() === color.toLowerCase()) {
+              swatch.classList.add("active");
+          }
+      });
 
     // Update all selected stones together
     const selectedStonesList = selectedObjects.filter(o => stones.includes(o));
@@ -696,6 +684,11 @@
           const overlayImg = new Image();
           overlayImg.src = colorInfo.image;
           overlayImg.onload = () => renderAvatar();
+            overlayImg.onerror = () => {
+                console.error("Failed to load overlay:", colorInfo.image);
+                stone.overlayImage = null;
+                renderAvatar();
+            };
           stone.overlayImage = overlayImg;
         } else {
           stone.overlayImage = null;
@@ -709,7 +702,7 @@
 
   function updateStoneColorSwatches(stoneType) {
     const palette = stoneColorPalettes[stoneType] || stoneColorPalettes['Diamond'];
-    const swatchContainer = document.querySelector('.expandable-menu .menu-options:nth-child(8) .color-swatches');
+    const swatchContainer = document.getElementById('stoneColorSwatches');
 
     if (!swatchContainer) return;
 
@@ -729,10 +722,11 @@
       } else {
         swatch.style.backgroundColor = colorObj.color;
       }
-
-      swatch.title = colorObj.name;
-      swatch.onclick = () => setStoneColor(colorObj.color);
-      swatchContainer.appendChild(swatch);
+        
+        swatch.title = colorObj.name;
+        swatch.dataset.color = colorObj.color;
+        swatch.onclick = () => setStoneColor(colorObj.color);
+        swatchContainer.appendChild(swatch);
     });
 
     // Set the first color as current and update selected stone when switched
@@ -779,29 +773,60 @@
 
     currentProngMetal = metalMap[color] || 'Yellow Gold';
     document.getElementById('prongMetalType').value = currentProngMetal;
-
-    // Update active swatch
-    document.querySelectorAll('.color-swatches .color-swatch').forEach(swatch => {
-      if (swatch.onclick && swatch.onclick.toString().includes('setProngColor')) {
-        swatch.classList.remove('active');
-        if (swatch.style.backgroundColor === rgbToHex(color) ||
-            swatch.style.backgroundColor.toLowerCase() === color.toLowerCase()) {
-          swatch.classList.add('active');
-        }
+      
+      // Update active swatch (PRONG ONLY)
+      const prongSwatches = document.querySelectorAll('#prongColorSwatches .color-swatch');
+      prongSwatches.forEach(swatch => {
+          swatch.classList.remove('active');
+          
+          const swatchHex = (swatch.dataset.color || "").toLowerCase();
+          if (swatchHex === color.toLowerCase()) swatch.classList.add("active");
+      });
+      
+      // Apply to all selected prongs
+      const selectedProngs = selectedObjects.filter(o => prongs.includes(o));
+      if (selectedProngs.length > 0) {
+          selectedProngs.forEach(p => {
+              p.color = color;
+              p.metalType = currentProngMetal;
+          });
+      } else {
+    // If no prong selected then color becomes default for new prongs
+          currentProngColor = color;
       }
-    });
-
-    if (selectedObject && prongs.includes(selectedObject)) {
-        selectedObject.color = color;
-        selectedObject.metalType = currentProngMetal;
-    } else {
-      currentProngColor = color;
-    }
-
-    renderAvatar();
-
+      
+      renderAvatar();
   }
-
+    function updateProngColorSwatches() {
+        const prongPalette = [
+            { color: '#FFD97A', name: 'Yellow Gold' },
+            { color: '#E8E8E6', name: 'White Gold' },
+            { color: '#FFC299', name: 'Rose Gold' },
+            { color: '#F1F1F1', name: 'Platinum' },
+            { color: '#DFDFDF', name: 'Silver' },
+        ];
+        
+        const swatchContainer = document.getElementById('prongColorSwatches');
+        if (!swatchContainer) return;
+        
+        swatchContainer.innerHTML = '';
+        
+        prongPalette.forEach((c) => {
+            const swatch = document.createElement('div');
+            swatch.className = 'color-swatch';
+            swatch.style.backgroundColor = c.color;
+            swatch.title = c.name;
+            swatch.dataset.color = c.color;
+            
+            if (c.color.toLowerCase() === currentProngColor.toLowerCase()) {
+                swatch.classList.add('active');
+            }
+            
+            swatch.onclick = () => setProngColor(c.color);
+            swatchContainer.appendChild(swatch);
+        });
+    }
+    
   // Helper to convert RGB to Hex
   function rgbToHex(color) {
     if (color.startsWith('#')) return color.toUpperCase();
@@ -820,11 +845,23 @@
     document.getElementById('bandMetalType')?.addEventListener('change', (e) => {
       currentBandMetal = e.target.value;
 
-      if (activeObject && bands.includes(activeObject)) {
-        activeObject.metalType = currentBandMetal;
-      }
-
-      renderAvatar();
+        const reverseMetalMap = {
+            'Yellow Gold': '#FFD97A',
+            'White Gold':  '#E8E8E6',
+            'Rose Gold':   '#FFC299',
+            'Platinum':    '#F1F1F1',
+            'Silver':      '#DFDFDF'
+        };
+        
+        const newColor = reverseMetalMap[currentBandMetal];
+        // If we have a known color, use setBandColor so it updates ALL selected bands
+        if (newColor) {
+            setBandColor(newColor);   // this already calls renderAvatar()
+        } else {
+            const selectedBands = selectedObjects.filter(o => bands.includes(o));
+            selectedBands.forEach(b => b.metalType = currentBandMetal);
+            renderAvatar();
+        }
     });
 
     document.getElementById('stoneType')?.addEventListener('change', (e) => {
@@ -867,15 +904,29 @@
 
     document.getElementById('prongMetalType')?.addEventListener('change', (e) => {
       currentProngMetal = e.target.value;
-
-      if (activeObject && prongs.includes(activeObject)) {
-        activeObject.metalType = currentProngMetal;
-      }
-
-      renderAvatar();
+        
+        const reverseMetalMap = {
+            'Yellow Gold': '#FFD97A',
+            'White Gold':  '#E8E8E6',
+            'Rose Gold':   '#FFC299',
+            'Platinum':    '#F1F1F1',
+            'Silver':      '#DFDFDF'
+        };
+        
+        const newColor = reverseMetalMap[currentProngMetal];
+        if (newColor) {
+            setProngColor(newColor);  // updates ALL selected prongs + render
+        } else {
+            const selectedProngs = selectedObjects.filter(o => prongs.includes(o));
+            selectedProngs.forEach(p => p.metalType = currentProngMetal);
+            
+            renderAvatar();
+        }
     });
 
-    updateStoneColorSwatches('Diamond');
+      updateBandColorSwatches();
+      updateStoneColorSwatches('Diamond');
+      updateProngColorSwatches();
   });
     // Apply color tint to image (preserves transparency)
     function applyColorTint(ctx, img, x, y, width, height, color, materialType, overlayImage = null) {
@@ -947,11 +998,11 @@
 
   // ===== HELPERS =====
   function normalizeScale(img) {
-    return 0.3;
+    return 0.3; // Scale to fit canvas 
   }
 
   function normalizeBandScale(img) {
-    return 0.3; // No scaling - use original pixel dimensions
+    return 0.3; // Scale to fit canvas
   }
 
   function updateAttachedProngs(stone) {
@@ -1036,7 +1087,7 @@
         'S1W16H17Band.png': { type: 'band', width: 1.6, height: 1.7, ringSize: 1 },
         'S1W16H18Band.png': { type: 'band', width: 1.6, height: 1.8, ringSize: 1 },
         
-        'S14W16H16Band.png': { type: 'band', width: 1.6, height: 1.8, ringSize: 14 },
+        'S14W16H16Band.png': { type: 'band', width: 1.6, height: 1.6, ringSize: 14 },
         
         // Stones: Size format [length_mm, width_mm, shape]
         '0_75mmRound.png': { type: 'stone', shape: 'Round', diameter: 0.75 },
@@ -1157,7 +1208,7 @@
     }
       
       img.onload = () => {
-      stone.scale = normalizeScale(img, 1);
+      stone.scale = normalizeScale(img);
 
       // Stone shape/radious is elipse not square image box
       stone.radiusX = (img.naturalWidth * stone.scale) / 2;
@@ -1305,8 +1356,8 @@
     img.src = src;
 
     img.onload = () => {
-      const targetProngSizeMM = 1.0; // First render size fixed to 1mm
-      const prongScale = targetProngSizeMM /(img.naturalWidth * 0.0442);
+      const targetProngSizeMM = 1.0; // Prong size, First render size fixed to 1mm
+      const prongScale = targetProngSizeMM /(img.naturalWidth * 0.0442); // scale prong mm to pixles
 
       const prong = {
         img,
@@ -1485,7 +1536,7 @@
         const rx = stone.radiusX;
         const ry = stone.radiusY;
 
-        const inset = 0.02; // 2% outward
+        const inset = 0.02; // 2% inward
 
         const angles = [
           Math.PI / 4,        // top-right
@@ -1514,7 +1565,7 @@
               metalType: currentProngMetal
             };
 
-            // initial placement
+            // initial placement // -inset moves position in (2%)
             prong.x = stone.x + Math.cos(angle) * rx * (1 - inset);
             prong.y = stone.y + Math.sin(angle) * ry * (1 - inset);
 
@@ -1661,7 +1712,7 @@
           // Calculate relative prong position to stone
           const dx = prong.x - targetStone.x;
           const dy = prong.y - targetStone.y;
-          prong.radious = Math.sqrt(dx * dx + dy * dy);
+          prong.radius = Math.sqrt(dx * dx + dy * dy);
           prong.angle = Math.atan2(dy, dx) - targetStone.rotation;
         });
 
@@ -1719,18 +1770,19 @@
             stoneType: obj.stoneType
           });
         } else if (prongs.includes(obj)) { // Copy prongs
-          clipboard.prongs.push({
-            x: obj.x,
-            y: obj.y,
-            scale: obj.scale,
-            rotation: obj.rotation,
-            imgSrc: obj.img.src,
-            radius: obj.radius,
-            angle: obj.angle,
-            color: obj.color,
-            metalType: obj.metalType,
-            parentStoneIndex: obj.parentStone ? stones.indexOf(obj.parentStone) : -1
-          });
+            const selectedStonesList = selectedObjects.filter(o => stones.includes(o));
+            clipboard.prongs.push({
+                x: obj.x,
+                y: obj.y,
+                scale: obj.scale,
+                rotation: obj.rotation,
+                imgSrc: obj.img.src,
+                radius: obj.radius,
+                angle: obj.angle,
+                color: obj.color,
+                metalType: obj.metalType,
+                parentStoneIndex: obj.parentStone ? selectedStonesList.indexOf(obj.parentStone) : -1
+            });
         }
       })
 
@@ -1748,7 +1800,7 @@
             angle: p.angle,
             color: p.color,
             metalType: p.metalType,
-            parentStoneIndex: selectedStonesList.indexOf(p.parentStone)
+            parentStoneIndex: p.parentStone ? selectedStonesList.indexOf(p.parentStone) : -1
           })
         }
       });
@@ -1845,7 +1897,7 @@
       const newObjects = [...newBands, ...newStones, ...newProngs];
       selectedObjects = newObjects;
       if (newStones.length > 0) {
-        selectedStones = newStones[0];
+        selectedStone = newStones[0];
       }
 
       renderAvatar();
@@ -1986,12 +2038,14 @@
 
   // ===== MENUS =====
   document.querySelectorAll(".expand-btn").forEach(btn => {
-    btn.addEventListener("click", () => {
       const menu = btn.nextElementSibling;
-      if (menu?.classList.contains("menu-options")) {
+      if (!menu || !menu.classList.contains("menu-options")) return;
+      
+    btn.addEventListener("click", () => {
         menu.classList.toggle("show");
-      }
     });
   });
 
 </script>
+</body>
+</html>
