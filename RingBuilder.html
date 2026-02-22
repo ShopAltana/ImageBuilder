@@ -2047,6 +2047,24 @@
     });
     
     // ===== SAVE AS PDF =====
+    function formatStatsForPDF(lines) { // Format PDF save
+        const sectionTitles = ['Band:', 'Bands:', 'Center Stone:', 'Center Stone(s):', 'Accent Stone:', 'Accent Stone(s):', 'Stone:', 'Stone(s):', 'Unattached Prongs'];
+        
+        return lines.map(line => {
+            const trimmed = line.trim();
+            const indent = line.search(/\S/);
+            const isSectionTitle = sectionTitles.some(title => trimmed.startsWith(title));
+            
+            if (isSectionTitle) {
+                return `<span class="stat-section-title">${trimmed}</span>`;
+            } else if (indent > 10) {
+                return `<span class="stat-sub">${trimmed}</span>`;
+            } else {
+                return `<span class="stat-line">${trimmed}</span>`;
+            }
+        }).join('');
+    }
+    
     function saveAsPDF() {
         // Deselect everything so highlights don't appear in the snapshot
         const prevSelected = [...selectedObjects];
@@ -2062,6 +2080,7 @@
         
         // Build stats text from the panel
         const statsText = document.getElementById('statsContent').innerText;
+        const statsLines = statsText.split('\n').filter(line => line.trim() !== '');
         
         // Open a hidden iframe to print from
         const printWindow = window.open('', '_blank');
@@ -2073,9 +2092,12 @@
             <style>
                 body { font-family: Trebuchet, sans-serif; display: flex; gap: 30px; padding: 30px; color: #555; }
                 img { border: 3px solid #da9d94; border-radius: 10px; width: 400px; height: 400px; object-fit: contain; }
-                .stats { flex: 1; font-size: 13px; line-height: 1.8; }
+                .stats { flex: 1; font-size: 13px; line-height: 1.6; }
                 h2 { color: #ffb9c0; margin-top: 0; }
                 hr { border: 1px solid #da9d94; }
+                .stat-section-title { font-weight: bold; margin-top: 12px; display: block; }
+                .stat-line { display: block; }
+                .stat-sub { display: block; color: #c7525d; padding-left: 15px; }
             </style>
         </head>
         <body>
@@ -2083,11 +2105,14 @@
             <div class="stats">
                 <h2>Ring Details</h2>
                 <hr/>
-                <pre style="white-space: pre-wrap; font-family: inherit;">${statsText}</pre>
+                <div id="statsbody">
+                    ${formatStatsForPDF(statsLines)}
+                </div>
             </div>
         </body>
         </html>
-        `);
+    `);
+        
         printWindow.document.close();
         printWindow.onload = () => {
             printWindow.print(); // triggers browser Save as PDF dialog
@@ -2152,18 +2177,26 @@
         textY += lineHeight;
         
         // Stats lines
+        const sectionTitles = ['Band:', 'Bands:', 'Center Stone:', 'Center Stone(s):', 'Accent Stone:', 'Accent Stone(s):', 'Stone:', 'Stone(s):', 'Unattached Prongs'];
+        
         statsLines.forEach(line => {
             const trimmed = line.trim();
-            const indent = line.search(/\S/); // detect indentation level from innerText
+            const indent = line.search(/\S/);
+            const isSectionTitle = sectionTitles.some(title => trimmed.startsWith(title));
             
-            ectx.font = trimmed.startsWith('(') || indent > 10
-                ? `12px Trebuchet, sans-serif` // sub-items
-                : trimmed === trimmed.toUpperCase() || indent === 0
-        ? `bold ${fontSize}px Trebuchet, sans-serif` // section headers
-        : `${fontSize}px Trebuchet, sans-serif`; // normal lines
+            // Add space above section titles
+            if (isSectionTitle) {
+                textY += lineHeight * 0.6; // extra gap before title
+            }
             
-            // Color sub-items (metal/stone type names) in pink
-            ectx.fillStyle = indent > 10 ? '#c7525d' : '#555555';
+            // Font: bold only for section titles, normal for everything else
+            if (isSectionTitle) {
+                ectx.font = `bold ${fontSize}px Trebuchet, sans-serif`;
+                ectx.fillStyle = '#555555'; // title text color
+            } else {
+                ectx.font = `${fontSize}px Trebuchet, sans-serif`;
+                ectx.fillStyle = indent > 10 ? '#c7525d' : '#555555'; // reg text color
+            }
             
             ectx.fillText(trimmed, textX + Math.min(indent * 2, 30), textY);
             textY += lineHeight;
