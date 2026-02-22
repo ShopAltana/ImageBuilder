@@ -59,7 +59,7 @@
             background-color:  #ffefed;
             border:5px solid #da9d94;
             border-radius: 10px;
-            justify-content: center; /* Centers horizontally */
+            justify-content: flex-start; /* align content to top */
             align-items: flex-start; /* Centers vertically */
             height: 600px; /* Ensures the container takes the full viewport height */
             width: 300px;
@@ -69,6 +69,9 @@
             
             overflow-y: auto; /* Add vertical scrollbar when needed */
             overflow-x: hidden; /* Prevent horizontal scrollbar */
+            
+            box-sizing: border-box; /* padding cannot push box wider than 300px */
+            padding-bottom: 15px; /* breathing room after the last instruction */
           }
 
         .canvas-container { /* The place where you build the ring */
